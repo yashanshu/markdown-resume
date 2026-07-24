@@ -339,9 +339,9 @@ const languageApi = computed(() =>
 );
 
 const themeModes = computed(() => [
+  { value: "system", label: t("settings.auto"), icon: "i-ph:desktop-bold" },
   { value: "light", label: t("settings.light"), icon: "i-ph:sun-bold" },
-  { value: "dark", label: t("settings.dark"), icon: "i-ph:moon-bold" },
-  { value: "system", label: t("settings.auto"), icon: "i-ph:desktop-bold" }
+  { value: "dark", label: t("settings.dark"), icon: "i-ph:moon-bold" }
 ]);
 
 const storageSupported = ref(true);
