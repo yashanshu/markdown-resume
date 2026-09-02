@@ -40,6 +40,21 @@ settings:
   erase_warning: This action will remove all data and return this app to its factory state. This cannot be undone.
   type_delete: Type DELETE to confirm.
   confirm: Confirm
+  ai: AI Assistant
+  ai_description: Owner-only settings for the AI chat panel in the editor. The panel activates when a proxy token is set.
+  ai_token: Proxy token
+  ai_token_placeholder: Paste the proxy token
+  ai_provider: Provider
+  ai_model: Model
+  ai_agent_mode: Agent mode
+  ai_mode_auto_edit: Auto-edit
+  ai_mode_suggest: Suggest
+  ai_history: Chat history
+  ai_history_server: Save on server
+  ai_history_off: Off
+  ai_models_hint: Paste the proxy token to load the model list.
+  ai_models_loading: Loading models…
+  ai_models_error: Failed to load models. Check the token and try again.
 
 head:
   title: Markdown Resume - Free Online Markdown Resume Maker

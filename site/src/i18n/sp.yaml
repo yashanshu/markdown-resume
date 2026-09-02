@@ -32,6 +32,21 @@ settings:
   resumes: Currículums
   images: Imágenes
   storage_unavailable: Las estimaciones de almacenamiento no están disponibles.
+  ai: Asistente de IA
+  ai_description: Ajustes exclusivos del propietario para el panel de chat de IA del editor. El panel se activa al configurar un token de proxy.
+  ai_token: Token de proxy
+  ai_token_placeholder: Pega el token de proxy
+  ai_provider: Proveedor
+  ai_model: Modelo
+  ai_agent_mode: Modo del agente
+  ai_mode_auto_edit: Autoedición
+  ai_mode_suggest: Sugerir
+  ai_history: Historial de chat
+  ai_history_server: Guardar en el servidor
+  ai_history_off: Desactivado
+  ai_models_hint: Pega el token de proxy para cargar la lista de modelos.
+  ai_models_loading: Cargando modelos…
+  ai_models_error: No se pudieron cargar los modelos. Revisa el token e inténtalo de nuevo.
 
 head:
   title: Markdown Resume - Generador de CV online GRATUITO!!

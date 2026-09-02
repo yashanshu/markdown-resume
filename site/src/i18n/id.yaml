@@ -40,6 +40,21 @@ settings:
   erase_warning: Tindakan ini akan menghapus semua data dan mengembalikan aplikasi ke keadaan awal. Tindakan ini tidak dapat dibatalkan.
   type_delete: Ketik DELETE untuk mengonfirmasi.
   confirm: Konfirmasi
+  ai: Asisten AI
+  ai_description: Pengaturan khusus pemilik untuk panel obrolan AI di editor. Panel aktif setelah token proksi diisi.
+  ai_token: Token proksi
+  ai_token_placeholder: Tempel token proksi
+  ai_provider: Penyedia
+  ai_model: Model
+  ai_agent_mode: Mode agen
+  ai_mode_auto_edit: Edit otomatis
+  ai_mode_suggest: Saran
+  ai_history: Riwayat obrolan
+  ai_history_server: Simpan di server
+  ai_history_off: Mati
+  ai_models_hint: Tempel token proksi untuk memuat daftar model.
+  ai_models_loading: Memuat model…
+  ai_models_error: Gagal memuat model. Periksa token lalu coba lagi.
 
 head:
   title: Markdown Resume - Pembuat Resume Markdown Online Gratis

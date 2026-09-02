@@ -32,6 +32,21 @@ settings:
   resumes: 简历
   images: 图片
   storage_unavailable: 此浏览器不支持存储空间估算。
+  ai: AI 助手
+  ai_description: 编辑器内 AI 聊天面板的拥有者专属设置。设置代理令牌后面板才会启用。
+  ai_token: 代理令牌
+  ai_token_placeholder: 粘贴代理令牌
+  ai_provider: 提供商
+  ai_model: 模型
+  ai_agent_mode: 代理模式
+  ai_mode_auto_edit: 自动编辑
+  ai_mode_suggest: 建议
+  ai_history: 聊天记录
+  ai_history_server: 保存到服务器
+  ai_history_off: 关闭
+  ai_models_hint: 粘贴代理令牌以加载模型列表。
+  ai_models_loading: 正在加载模型…
+  ai_models_error: 模型列表加载失败。请检查令牌后重试。
 
 head:
   title: Markdown Resume - 免费的在线简历制作工具

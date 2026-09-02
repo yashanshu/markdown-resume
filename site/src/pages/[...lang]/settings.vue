@@ -154,6 +154,70 @@
 
         <section class="settings-card md:col-span-2">
           <div class="settings-card-heading">
+            <span i-mdi:robot-outline text-xl />
+            <h2>{{ $t("settings.ai") }}</h2>
+          </div>
+          <p class="storage-description">
+            {{ $t("settings.ai_description") }}
+          </p>
+          <div class="grid gap-4 sm:grid-cols-2">
+            <div class="sm:col-span-2">
+              <label class="field-label" for="ai-token">
+                {{ $t("settings.ai_token") }}
+              </label>
+              <input
+                id="ai-token"
+                v-model="aiToken"
+                class="language-menu-trigger"
+                type="password"
+                autocomplete="off"
+                :placeholder="$t('settings.ai_token_placeholder')"
+                @input="setAiToken(aiToken)"
+                @change="refreshAiModels"
+              />
+            </div>
+            <div>
+              <label class="field-label" for="ai-provider">
+                {{ $t("settings.ai_provider") }}
+              </label>
+              <Combobox id="ai-provider" :items="providerItems" :default="aiProvider" />
+            </div>
+            <div>
+              <label class="field-label" for="ai-model">
+                {{ $t("settings.ai_model") }}
+              </label>
+              <Combobox id="ai-model" :items="aiModelItems" :default="aiModel" />
+              <p v-if="!aiToken" class="ai-model-note">
+                {{ $t("settings.ai_models_hint") }}
+              </p>
+              <p v-else-if="isFetchingModels" class="ai-model-note">
+                {{ $t("settings.ai_models_loading") }}
+              </p>
+              <p v-else-if="modelsError" class="ai-model-note ai-model-note--error">
+                {{ $t("settings.ai_models_error") }}
+              </p>
+            </div>
+            <div>
+              <label class="field-label" for="ai-agent-mode">
+                {{ $t("settings.ai_agent_mode") }}
+              </label>
+              <Combobox
+                id="ai-agent-mode"
+                :items="agentModeItems"
+                :default="aiAgentMode"
+              />
+            </div>
+            <div>
+              <label class="field-label" for="ai-history">
+                {{ $t("settings.ai_history") }}
+              </label>
+              <Combobox id="ai-history" :items="historyItems" :default="aiHistory" />
+            </div>
+          </div>
+        </section>
+
+        <section class="settings-card md:col-span-2">
+          <div class="settings-card-heading">
             <span i-mdi:database-outline text-xl />
             <h2>{{ $t("settings.storage") }}</h2>
             <button
@@ -313,6 +377,23 @@ import {
   getDefaultPaperSize,
   setDefaultPaperSize,
 } from "~/utils/defaultSettings";
+import {
+  AI_STORAGE_KEYS,
+  fetchAiModels,
+  getAiAgentMode,
+  getAiHistory,
+  getAiModel,
+  getAiProvider,
+  getAiToken,
+  setAiAgentMode,
+  setAiHistory,
+  setAiModel,
+  setAiProvider,
+  setAiToken,
+  type AiAgentMode,
+  type AiHistory,
+  type AiProvider
+} from "~/utils/aiSettings";
 import { PAPER } from "~/utils/constants/data";
 import type { PaperType } from "~/types";
 
@@ -368,6 +449,101 @@ const paperItems = Object.keys(PAPER).map((paper) => ({
   },
 }));
 
+const aiToken = ref("");
+const aiProvider = ref<AiProvider>("go");
+const aiModel = ref("");
+const aiAgentMode = ref<AiAgentMode>("suggest");
+const aiHistory = ref<AiHistory>("off");
+const aiModelItems = ref<ComboboxItem[]>([]);
+const isFetchingModels = ref(false);
+const modelsError = ref(false);
+
+const selectProvider = (provider: AiProvider) => {
+  aiProvider.value = provider;
+  setAiProvider(provider);
+  aiModel.value = "";
+  setAiModel("");
+  refreshAiModels();
+};
+
+const providerItems: ComboboxItem[] = [
+  { label: "OpenCode Go", value: "go", onSelect: () => selectProvider("go") },
+  {
+    label: "OpenRouter",
+    value: "openrouter",
+    onSelect: () => selectProvider("openrouter")
+  }
+];
+
+const agentModeItems = computed<ComboboxItem[]>(() => [
+  {
+    label: t("settings.ai_mode_auto_edit"),
+    value: "auto-edit",
+    onSelect: () => {
+      aiAgentMode.value = "auto-edit";
+      setAiAgentMode("auto-edit");
+    }
+  },
+  {
+    label: t("settings.ai_mode_suggest"),
+    value: "suggest",
+    onSelect: () => {
+      aiAgentMode.value = "suggest";
+      setAiAgentMode("suggest");
+    }
+  }
+]);
+
+const historyItems = computed<ComboboxItem[]>(() => [
+  {
+    label: t("settings.ai_history_server"),
+    value: "server",
+    onSelect: () => {
+      aiHistory.value = "server";
+      setAiHistory("server");
+    }
+  },
+  {
+    label: t("settings.ai_history_off"),
+    value: "off",
+    onSelect: () => {
+      aiHistory.value = "off";
+      setAiHistory("off");
+    }
+  }
+]);
+
+const refreshAiModels = async () => {
+  const token = aiToken.value.trim();
+  if (!token) {
+    aiModelItems.value = [];
+    modelsError.value = false;
+    return;
+  }
+  isFetchingModels.value = true;
+  modelsError.value = false;
+  try {
+    const ids = await fetchAiModels(aiProvider.value, token);
+    aiModelItems.value = ids.map((id) => ({
+      label: id,
+      value: id,
+      onSelect: () => {
+        aiModel.value = id;
+        setAiModel(id);
+      }
+    }));
+    if (!ids.includes(aiModel.value)) {
+      aiModel.value = "";
+      setAiModel("");
+    }
+  } catch {
+    aiModelItems.value = [];
+    modelsError.value = true;
+  } finally {
+    isFetchingModels.value = false;
+  }
+};
+
 const saveMinimapSetting = () => setEditorMinimapEnabled(minimapEnabled.value);
 const saveLineNumbersSetting = () =>
   setEditorLineNumbersEnabled(lineNumbersEnabled.value);
@@ -422,6 +598,7 @@ const eraseAllData = async () => {
   localStorage.removeItem(EDITOR_LINE_NUMBERS_STORAGE_KEY);
   localStorage.removeItem("default-full-name");
   localStorage.removeItem("default-paper-size");
+  AI_STORAGE_KEYS.forEach((key) => localStorage.removeItem(key));
   window.location.reload();
 };
 const displayPercent = computed(() => {
@@ -473,6 +650,12 @@ onMounted(async () => {
   lineNumbersEnabled.value = getEditorLineNumbersEnabled();
   defaultFullName.value = getDefaultFullName();
   defaultPaperSize.value = getDefaultPaperSize() as PaperType;
+  aiToken.value = getAiToken();
+  aiProvider.value = getAiProvider();
+  aiModel.value = getAiModel();
+  aiAgentMode.value = getAiAgentMode();
+  aiHistory.value = getAiHistory();
+  await refreshAiModels();
   await refreshStorageEstimate();
 });
 
@@ -561,6 +744,14 @@ useHead({ title: () => `${t("settings.title")} — Markdown Resume` });
 
 .editor-checkbox {
   @apply mt-0.5 size-4 flex-none cursor-pointer accent-blue-500 dark:accent-[#007acc];
+}
+
+.ai-model-note {
+  @apply mt-2 text-xs leading-4 text-light-c;
+}
+
+.ai-model-note--error {
+  @apply text-red-500 dark:text-red-400;
 }
 
 .storage-ring {
