@@ -135,7 +135,7 @@ pnpm exec wrangler d1 migrations apply markdown-resume-history --remote
 pnpm exec wrangler secret put GO_API_KEY           # OpenCode Go key
 pnpm exec wrangler secret put OPENROUTER_API_KEY   # OpenRouter key
 pnpm exec wrangler secret put PROXY_TOKEN          # long random string — this is what you paste into Settings
-pnpm deploy
+pnpm run deploy                                    # "run" is required: pnpm deploy is a built-in pnpm command
 ```
 
 Then route a custom domain (e.g. `api.resume.hasufel.shop`) to the worker. In [`worker/wrangler.toml`](worker/wrangler.toml), set `SITE_ORIGIN` to your site's origin — the worker rejects requests from anywhere else — and optionally adjust `DAILY_REQUEST_CAP` (default `200`, fails closed).

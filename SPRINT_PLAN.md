@@ -24,7 +24,7 @@ Status: Sprint 4 code-complete — items 2 (README setup docs), 3 (Privacy/About
   - Routes `/:upstream/v1/chat/completions` and `/:upstream/v1/models` where `:upstream` is `go` or `openrouter`; prefix stripped, request forwarded untouched with that upstream's key
   - Wrangler secrets: `GO_API_KEY`, `OPENROUTER_API_KEY`, `PROXY_TOKEN` (bearer token checked by the worker; pasted once into Settings on owner machines)
   - Wrangler vars, defaults in code: `GO_BASE_URL`, `OPENROUTER_BASE_URL`
-- **Tooling**: `worker/` is a package in the pnpm workspace — wrangler as devDependency, `pnpm dev` / `pnpm deploy` scripts. All commands via pnpm; wrangler auth, secrets, and deploys run on the owner's machine, never from the agent or CI.
+- **Tooling**: `worker/` is a package in the pnpm workspace — wrangler as devDependency, `pnpm dev` / `pnpm run deploy` scripts. All commands via pnpm; wrangler auth, secrets, and deploys run on the owner's machine, never from the agent or CI.
 - **Worker guards**:
   - reject requests whose `Origin`/`Referer` is not the site
   - daily request cap per upstream (D1 counter) that fails closed — OpenRouter is metered billing, so a leaked token or runaway loop hits a wall
@@ -66,7 +66,7 @@ Status: Sprint 4 code-complete — items 2 (README setup docs), 3 (Privacy/About
 
 ### Sprint 4 — Deploy + honesty pass (~1 evening)
 
-1. Deploy (manual, on the owner's machine): site → Cloudflare Pages; worker → `pnpm deploy` in `worker/`, then custom domain `api.resume.hasufel.shop`
+1. Deploy (manual, on the owner's machine): site → Cloudflare Pages; worker → `pnpm run deploy` in `worker/`, then custom domain `api.resume.hasufel.shop`
 2. **Done** — README: setup docs (deploy worker, configure secrets, Settings walkthrough)
 3. **Done** — Privacy + About pages: AI section — owner-only, what transits (Go/OpenRouter), what's stored (D1 history), and the blanket "never transmitted" claims qualified
 4. **Done** — Error toasts: missing token, bad endpoint, rate limit, model 400 (some Go models are Anthropic-upstream — point the user at another model)
