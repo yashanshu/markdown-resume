@@ -37,19 +37,10 @@
         </section>
 
         <section>
-          <h2>Analytics</h2>
+          <h2>Analytics &amp; tracking</h2>
           <p>
-            When you use the hosted website, we use <strong>Cloudflare Web
-            Analytics</strong> and <strong>Google Analytics</strong> to understand
-            aggregate usage, including metrics such as page views, active users,
-            device or browser categories, and general interaction patterns. These
-            measurements help us understand how the application is used and improve it.
-          </p>
-          <p>
-            The analytics services may process technical information such as an IP
-            address, browser and device information, referring pages, and analytics
-            identifiers according to their own privacy practices. Your résumé text,
-            document settings, and uploaded images are not included in analytics events.
+            This application does not use analytics or tracking services. No analytics
+            scripts are loaded, and no usage data is collected or transmitted to third parties.
           </p>
         </section>
 
@@ -58,25 +49,23 @@
           <p>
             We do not sell your personal information. Résumé and image data stored by
             this app are not shared with third parties because they remain in your
-            browser. Analytics information is processed by Cloudflare and Google only
-            for the measurement purposes described above.
+            browser.
           </p>
         </section>
 
         <section>
           <h2>Changes to this policy</h2>
           <p>
-            We may update this policy when the application or its analytics setup
-            changes. The latest version and its revision date will be published on
-            this page.
+            We may update this policy when the application changes. The latest version
+            and its revision date will be published on this page.
           </p>
         </section>
 
         <section>
           <h2>Contact</h2>
           <p>
-            For questions about this privacy policy, visit
-            <a href="https://www.junian.dev/" target="_blank" rel="noopener">Junian.dev</a>.
+            For questions about this privacy policy, visit the
+            <a href="https://github.com/yashanshu/markdown-resume" target="_blank" rel="noopener">repository</a>.
           </p>
         </section>
       </div>

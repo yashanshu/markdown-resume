@@ -170,26 +170,10 @@
         </section>
 
         <section>
-          <h2>Analytics</h2>
-          <p>
-            When you use the hosted version at <a href="https://junian.dev/markdown-resume/" target="_blank" rel="nofollow noopener noreferrer">junian.dev/markdown-resume/</a>,
-            we use <strong>Google Analytics</strong> and <strong>Cloudflare Web Analytics</strong> to understand aggregate usage patterns.
-            These help us improve the application by showing us things like page views and active users.
-          </p>
-          <p>
-            <strong>Important:</strong> Your resume content, document settings, and uploaded images are <em>never</em> included
-            in analytics events. We only collect pseudonymous technical information to help us make the app better.
-            Google Analytics is used in a pseudonymous manner, and no resume content is transmitted to analytics providers.
-            By using the hosted version, you agree to our <a href="./privacy-policy/" target="_blank" rel="nofollow noopener noreferrer">Privacy Policy</a>.
-          </p>
-        </section>
-
-        <section>
           <h2>Get in Touch</h2>
           <p>
             Have questions, feedback, or want to contribute? We'd love to hear from you!
-            Visit <a href="https://www.junian.dev/" target="_blank" rel="nofollow noopener noreferrer">Junian.dev</a> or check out the
-            repository to get involved.
+            Check out the <a href="https://github.com/yashanshu/markdown-resume" target="_blank" rel="nofollow noopener noreferrer">repository</a> to get involved.
           </p>
         </section>
       </div>

@@ -13,8 +13,6 @@ export default defineNuxtConfig({
     "@nuxtjs/i18n",
     "@nuxtjs/color-mode",
     "@vite-pwa/nuxt",
-    "nuxt-gtag",
-    "nuxt-clarity-analytics",
     "nuxt-simple-sitemap"
   ],
 
@@ -35,8 +33,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      googleFontsKey: "",
-      disqusShortname: ""
+      googleFontsKey: ""
     }
   },
 
@@ -73,7 +70,6 @@ export default defineNuxtConfig({
         { property: "og:locale", content: "en_US" },
         { property: "og:image", content: siteConfig.image },
         { property: "twitter:card", content: "summary_large_image" },
-        { property: "twitter:site", content: "@JunianDev" },
         { property: "twitter:title", content: siteConfig.title },
         { property: "twitter:description", content: siteConfig.description },
         { property: "twitter:image", content: siteConfig.image },
@@ -89,10 +85,6 @@ export default defineNuxtConfig({
 
   nitro: {
     runtimeConfig: {}
-  },
-
-  gtag: {
-    id: process.env.NUXT_PUBLIC_GTAG_ID || ""
   }
 
 });
