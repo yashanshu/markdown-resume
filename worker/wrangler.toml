@@ -2,6 +2,10 @@ name = "markdown-resume-ai"
 main = "src/index.ts"
 compatibility_date = "2026-08-01"
 
+routes = [
+  { pattern = "api-resume.hasufel.shop", custom_domain = true }
+]
+
 [vars]
 GO_BASE_URL = "https://opencode.ai/zen/go/v1"
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
@@ -11,4 +15,4 @@ DAILY_REQUEST_CAP = "200"
 [[d1_databases]]
 binding = "DB"
 database_name = "markdown-resume-history"
-database_id = "00000000-0000-0000-0000-000000000000"
+database_id = "817f25ed-1c8f-4821-930b-9522eb57afce"

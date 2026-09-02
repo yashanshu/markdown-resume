@@ -138,7 +138,7 @@ pnpm exec wrangler secret put PROXY_TOKEN          # long random string — this
 pnpm run deploy                                    # "run" is required: pnpm deploy is a built-in pnpm command
 ```
 
-Then route a custom domain (e.g. `api.resume.hasufel.shop`) to the worker. In [`worker/wrangler.toml`](worker/wrangler.toml), set `SITE_ORIGIN` to your site's origin — the worker rejects requests from anywhere else — and optionally adjust `DAILY_REQUEST_CAP` (default `200`, fails closed).
+Then route a custom domain (e.g. `api-resume.hasufel.shop`) to the worker. In [`worker/wrangler.toml`](worker/wrangler.toml), set `SITE_ORIGIN` to your site's origin — the worker rejects requests from anywhere else — and optionally adjust `DAILY_REQUEST_CAP` (default `200`, fails closed).
 
 The client hard-codes the API base URL (`AI_API_BASE_URL` in [`site/src/utils/aiSettings.ts`](site/src/utils/aiSettings.ts)); change it if you host the worker elsewhere.
 

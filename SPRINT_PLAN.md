@@ -19,7 +19,7 @@ Status: Sprint 4 code-complete — items 2 (README setup docs), 3 (Privacy/About
 
 - **Cloudflare only, $0**:
   - Pages hosts the static site at `resume.hasufel.shop`
-  - Worker at `api.resume.hasufel.shop` with D1 (free tier: 5 GB storage, 25k writes/day)
+  - Worker at `api-resume.hasufel.shop` with D1 (free tier: 5 GB storage, 25k writes/day)
 - **Worker** = OpenAI-compatible passthrough + small history API:
   - Routes `/:upstream/v1/chat/completions` and `/:upstream/v1/models` where `:upstream` is `go` or `openrouter`; prefix stripped, request forwarded untouched with that upstream's key
   - Wrangler secrets: `GO_API_KEY`, `OPENROUTER_API_KEY`, `PROXY_TOKEN` (bearer token checked by the worker; pasted once into Settings on owner machines)
@@ -66,7 +66,7 @@ Status: Sprint 4 code-complete — items 2 (README setup docs), 3 (Privacy/About
 
 ### Sprint 4 — Deploy + honesty pass (~1 evening)
 
-1. Deploy (manual, on the owner's machine): site → Cloudflare Pages; worker → `pnpm run deploy` in `worker/`, then custom domain `api.resume.hasufel.shop`
+1. Deploy (manual, on the owner's machine): site → Cloudflare Pages; worker → `pnpm run deploy` in `worker/`, then custom domain `api-resume.hasufel.shop`
 2. **Done** — README: setup docs (deploy worker, configure secrets, Settings walkthrough)
 3. **Done** — Privacy + About pages: AI section — owner-only, what transits (Go/OpenRouter), what's stored (D1 history), and the blanket "never transmitted" claims qualified
 4. **Done** — Error toasts: missing token, bad endpoint, rate limit, model 400 (some Go models are Anthropic-upstream — point the user at another model)

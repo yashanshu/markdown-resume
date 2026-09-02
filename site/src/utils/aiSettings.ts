@@ -2,7 +2,7 @@ export type AiProvider = "go" | "openrouter";
 export type AiAgentMode = "auto-edit" | "suggest";
 export type AiHistory = "server" | "off";
 
-export const AI_API_BASE_URL = "https://api.resume.hasufel.shop";
+export const AI_API_BASE_URL = "https://api-resume.hasufel.shop";
 
 export const AI_TOKEN_STORAGE_KEY = "ai-proxy-token";
 export const AI_PROVIDER_STORAGE_KEY = "ai-provider";
