@@ -48,13 +48,17 @@ export default defineNuxtConfig({
     // Else if host it on https://example.com/markdown-resume/
     //    baseURL: '/markdown-resume/'
     baseURL: siteConfig.baseURL, // baseURL: '/<repository>/'
-    buildAssetsDir: 'assets', // don't use "_" at the begining of the folder name to avoids
+    buildAssetsDir: "assets", // don't use "_" at the begining of the folder name to avoids
     head: {
       viewport: "width=device-width,initial-scale=1",
       link: [
         { rel: "canonical", href: `${siteConfig.url}${siteConfig.baseURL}` },
         { rel: "apple-touch-icon", href: `${siteConfig.baseURL}apple-touch-icon.png` },
-        { rel: "mask-icon", href: `${siteConfig.baseURL}safari-pinned-tab.svg`, color: "#222" }
+        {
+          rel: "mask-icon",
+          href: `${siteConfig.baseURL}safari-pinned-tab.svg`,
+          color: "#222"
+        }
       ],
       meta: [
         { name: "viewport", content: "width=device-width, initial-scale=1" },
@@ -72,7 +76,7 @@ export default defineNuxtConfig({
         { property: "twitter:card", content: "summary_large_image" },
         { property: "twitter:title", content: siteConfig.title },
         { property: "twitter:description", content: siteConfig.description },
-        { property: "twitter:image", content: siteConfig.image },
+        { property: "twitter:image", content: siteConfig.image }
       ]
     }
   },
@@ -86,5 +90,4 @@ export default defineNuxtConfig({
   nitro: {
     runtimeConfig: {}
   }
-
 });

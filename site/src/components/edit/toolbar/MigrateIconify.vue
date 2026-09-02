@@ -41,7 +41,8 @@ const migrateLegacyIconify = (markdown: string) => {
         .trim();
 
       if (remainingClasses.length > 0) {
-        remainingAttributes = `${remainingAttributes} class="${remainingClasses.join(" ")}"`.trim();
+        remainingAttributes =
+          `${remainingAttributes} class="${remainingClasses.join(" ")}"`.trim();
       }
 
       count += 1;

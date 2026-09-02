@@ -255,7 +255,10 @@ const main = async () => {
 
   const events7b: AgentEvent[] = [];
   await run({ model: "bad-model", mode: "auto-edit", onEvent: (e) => events7b.push(e) });
-  check("400 (non-tool) -> model-error notice", noticesOf(events7b).includes("model-error"));
+  check(
+    "400 (non-tool) -> model-error notice",
+    noticesOf(events7b).includes("model-error")
+  );
 
   const events7c: AgentEvent[] = [];
   await run({ token: "wrong-token", onEvent: (e) => events7c.push(e) });
@@ -273,10 +276,7 @@ const main = async () => {
     "network error -> bad-endpoint",
     agentErrorNoticeCode(new TypeError("fetch failed")) === "bad-endpoint"
   );
-  check(
-    "402 -> rate-limit",
-    agentErrorNoticeCode({ statusCode: 402 }) === "rate-limit"
-  );
+  check("402 -> rate-limit", agentErrorNoticeCode({ statusCode: 402 }) === "rate-limit");
   check(
     "RetryError-wrapped 429 -> rate-limit",
     agentErrorNoticeCode({ lastError: { statusCode: 429 } }) === "rate-limit"

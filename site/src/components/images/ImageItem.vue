@@ -4,11 +4,7 @@
     <div
       class="relative w-44 h-44 overflow-hidden rounded-md border border-c cursor-pointer duration-150 hover:(-translate-y-2 drop-shadow-xl)"
     >
-      <img
-        :src="imageUrl"
-        :alt="image.name"
-        class="w-full h-full object-cover"
-      />
+      <img :src="imageUrl" :alt="image.name" class="w-full h-full object-cover" />
 
       <!-- Hover action buttons -->
       <div class="absolute right-2 top-2 hidden group-hover:flex flex-col gap-2">

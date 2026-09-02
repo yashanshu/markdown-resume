@@ -10,7 +10,7 @@
 const { t, locale } = useI18n();
 const colorMode = useColorMode();
 const preferredDark = { value: false }; //usePreferredDark();
-import { siteConfig } from '~~/configs/siteConfig';
+import { siteConfig } from "~~/configs/siteConfig";
 
 useHead({
   title: t("head.title"),
@@ -29,9 +29,10 @@ useHead({
     {
       rel: "icon",
       type: "image/svg+xml",
-      href: () => (preferredDark.value 
-            ? `${siteConfig.baseURL}favicon-dark.svg` 
-            : `${siteConfig.baseURL}favicon.svg`)
+      href: () =>
+        preferredDark.value
+          ? `${siteConfig.baseURL}favicon-dark.svg`
+          : `${siteConfig.baseURL}favicon.svg`
     }
   ],
   script: [

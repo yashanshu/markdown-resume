@@ -80,7 +80,7 @@ export const useResumeExport = () => {
     try {
       const htmlDocument = await generateHtmlDocument();
       const { asBlob } = await import("html-docx-js-typescript");
-      // @ts-ignore file-saver does not provide types
+      // @ts-expect-error file-saver does not provide types
       const { saveAs } = await import("file-saver");
       asBlob(htmlDocument).then((blob) => saveAs(blob, `${saveName.value}.docx`));
     } catch (error) {

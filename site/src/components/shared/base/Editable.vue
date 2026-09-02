@@ -17,10 +17,7 @@
         <input
           v-show="api.isEditing"
           v-bind="api.inputProps"
-          :class="[
-            'min-w-0 w-full outline-none px-1 bg-transparent',
-            textAlignClass
-          ]"
+          :class="['min-w-0 w-full outline-none px-1 bg-transparent', textAlignClass]"
         />
         <div
           v-show="!api.isEditing"

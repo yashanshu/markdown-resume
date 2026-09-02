@@ -21,9 +21,7 @@
           </div>
           <div class="grid gap-4 sm:grid-cols-2">
             <div>
-              <label class="field-label" for="default-full-name">
-                Full Name
-              </label>
+              <label class="field-label" for="default-full-name"> Full Name </label>
               <input
                 id="default-full-name"
                 v-model="defaultFullName"
@@ -34,10 +32,13 @@
               />
             </div>
             <div>
-              <label class="field-label" for="default-paper-size">
-                Paper Size
-              </label>
-              <Combobox id="default-paper-size" :items="paperItems" :default="defaultPaperSize" capitalize />
+              <label class="field-label" for="default-paper-size"> Paper Size </label>
+              <Combobox
+                id="default-paper-size"
+                :items="paperItems"
+                :default="defaultPaperSize"
+                capitalize
+              />
             </div>
           </div>
         </section>
@@ -370,12 +371,11 @@
 <script lang="ts" setup>
 import * as menu from "@zag-js/menu";
 import { normalizeProps, useMachine } from "@zag-js/vue";
-import { siteConfig } from "~~/configs/siteConfig";
 import {
   getDefaultFullName,
   setDefaultFullName,
   getDefaultPaperSize,
-  setDefaultPaperSize,
+  setDefaultPaperSize
 } from "~/utils/defaultSettings";
 import {
   AI_STORAGE_KEYS,
@@ -400,7 +400,6 @@ import type { PaperType } from "~/types";
 const colorMode = useColorMode();
 const { t, locale, locales } = useI18n();
 const switchLocalePath = useSwitchLocalePath();
-const appBaseURL = useRuntimeConfig().app.baseURL;
 
 const currentLocale = computed(() =>
   locales.value.find((item) => item.code === locale.value)
@@ -446,7 +445,7 @@ const paperItems = Object.keys(PAPER).map((paper) => ({
   onSelect: () => {
     defaultPaperSize.value = paper as PaperType;
     setDefaultPaperSize(paper);
-  },
+  }
 }));
 
 const aiToken = ref("");
@@ -548,50 +547,11 @@ const saveMinimapSetting = () => setEditorMinimapEnabled(minimapEnabled.value);
 const saveLineNumbersSetting = () =>
   setEditorLineNumbersEnabled(lineNumbersEnabled.value);
 
-const clearServiceWorkerData = async () => {
-  const appUrl = new URL(appBaseURL, window.location.origin);
-
-  const cacheCleanup = async () => {
-    if (!("caches" in window)) return;
-
-    const cacheNames = await caches.keys();
-    const appPath = appUrl.pathname === "/" ? "/" : appUrl.pathname.replace(/\/$/, "");
-    await Promise.all(
-      cacheNames
-        .filter(
-          (name) =>
-            name.startsWith(`${siteConfig.cacheId}-`) ||
-            name === "google-fonts-cache" ||
-            (name.startsWith("workbox-precache-") &&
-              (appPath === "/" || name.includes(appPath)))
-        )
-        .map((name) => caches.delete(name))
-    );
-  };
-
-  const serviceWorkerCleanup = async () => {
-    if (!("serviceWorker" in navigator)) return;
-
-    const registrations = await navigator.serviceWorker.getRegistrations();
-    await Promise.all(
-      registrations
-        .filter((registration) => registration.scope.startsWith(appUrl.href))
-        .map((registration) => registration.unregister())
-    );
-  };
-
-  await Promise.allSettled([serviceWorkerCleanup()]);
-  await Promise.allSettled([cacheCleanup()]);
-};
-
 const eraseAllData = async () => {
   if (deleteConfirmation.value !== "DELETE" || isErasing.value) return;
 
   isErasing.value = true;
-  await Promise.all([
-    clearResumeStorage(),
-    clearImageStorage()
-  ]);
+  await Promise.all([clearResumeStorage(), clearImageStorage()]);
   localStorage.removeItem("navigation-collapsed");
   localStorage.removeItem("nuxt-color-mode");
   localStorage.removeItem(EDITOR_MINIMAP_STORAGE_KEY);

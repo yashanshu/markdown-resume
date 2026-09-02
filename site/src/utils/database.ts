@@ -1,12 +1,8 @@
 import * as localForage from "localforage";
 import { downloadFile, uploadFile, copy, isClient } from "@renovamen/utils";
 import { DEFAULT_STYLES, DEFAULT_NAME, DEFAULT_MD_CONTENT, DEFAULT_CSS_CONTENT } from ".";
-import {
-  getDefaultFullName,
-  getDefaultPaperSize,
-  DEFAULT_FULL_NAME,
-} from "./defaultSettings";
-import type { ResumeStorage, ResumeStorageItem, ResumeStyles } from "~/types";
+import { getDefaultFullName, getDefaultPaperSize } from "./defaultSettings";
+import type { PaperType, ResumeStorage, ResumeStorageItem, ResumeStyles } from "~/types";
 
 const MARKDOWN_RESUME_KEY = "MARKDOWN_RESUME_data";
 
@@ -110,13 +106,16 @@ export const newResume = async () => {
   const id = new Date().getTime().toString(); // generate a new id
   const defaultFullName = getDefaultFullName();
   // Determine resume name and markdown name
-  const resumeName = defaultFullName.trim() 
-    ? `${defaultFullName.trim()} Resume` 
+  const resumeName = defaultFullName.trim()
+    ? `${defaultFullName.trim()} Resume`
     : DEFAULT_NAME;
   const markdownNameToUse = defaultFullName.trim() || "Firstname Lastname";
   // Replace the default name in markdown
-  const markdown = DEFAULT_MD_CONTENT.replace("# Firstname Lastname", `# ${markdownNameToUse}`);
-  const styles = { ...DEFAULT_STYLES, paper: getDefaultPaperSize() as any };
+  const markdown = DEFAULT_MD_CONTENT.replace(
+    "# Firstname Lastname",
+    `# ${markdownNameToUse}`
+  );
+  const styles = { ...DEFAULT_STYLES, paper: getDefaultPaperSize() as PaperType };
 
   const resume = {
     name: resumeName,

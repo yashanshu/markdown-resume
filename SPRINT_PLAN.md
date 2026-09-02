@@ -1,6 +1,6 @@
 # AI Agent Integration — Sprint Plan (DRAFT)
 
-Status: Sprint 4 in progress — items 2 (README setup docs) and 4 (error notices: missing/bad token, bad endpoint, rate limit, model 400) shipped; 27/27 local checks pass (`pnpm verify:ai` in `site/`). Remaining: item 1 deploy + item 3 Privacy/About honesty pass + item 5 live verify — deploy needs the owner's machine; live end-to-end on both upstreams still needs the owner's token (run with the panel against the deployed worker, or `worker/verify.sh real`).
+Status: Sprint 4 code-complete — items 2 (README setup docs), 3 (Privacy/About AI honesty pass) and 4 (error notices: missing/bad token, bad endpoint, rate limit, model 400) shipped. Local checks all green: `pnpm build` passes, 27/27 in `site/` (`pnpm verify:ai`), 20/20 in `worker/` (`./verify.sh mock`). Remaining are the two owner-machine steps: item 1 deploy (wrangler auth + secrets + Pages) and item 5 live end-to-end on both upstreams — run the panel against the deployed worker, or `worker/verify.sh real` with real keys in `worker/.dev.vars`.
 
 ## Decisions
 
@@ -68,9 +68,9 @@ Status: Sprint 4 in progress — items 2 (README setup docs) and 4 (error notice
 
 1. Deploy (manual, on the owner's machine): site → Cloudflare Pages; worker → `pnpm deploy` in `worker/`, then custom domain `api.resume.hasufel.shop`
 2. **Done** — README: setup docs (deploy worker, configure secrets, Settings walkthrough)
-3. Privacy + About pages: AI section — owner-only, what transits (Go/OpenRouter), what's stored (D1 history)
+3. **Done** — Privacy + About pages: AI section — owner-only, what transits (Go/OpenRouter), what's stored (D1 history), and the blanket "never transmitted" claims qualified
 4. **Done** — Error toasts: missing token, bad endpoint, rate limit, model 400 (some Go models are Anthropic-upstream — point the user at another model)
-5. Verify: live at `resume.hasufel.shop`, chat works over the internet on both upstreams, `pnpm build` passes
+5. Verify: live at `resume.hasufel.shop`, chat works over the internet on both upstreams, `pnpm build` passes (build verified locally; the live half waits on item 1)
 
 ## Out of scope (for now)
 

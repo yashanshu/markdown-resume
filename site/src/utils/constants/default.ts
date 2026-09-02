@@ -26,4 +26,7 @@ export const DEFAULT_MD_CONTENT = defaultResumeMarkdown;
 
 export const PREVIEW_SELECTOR = "#vue-smart-pages-preview";
 
-export const DEFAULT_CSS_CONTENT = defaultResumeCSS.replaceAll("#PREVIEW_SELECTOR", PREVIEW_SELECTOR);
+export const DEFAULT_CSS_CONTENT = defaultResumeCSS.replaceAll(
+  "#PREVIEW_SELECTOR",
+  PREVIEW_SELECTOR
+);

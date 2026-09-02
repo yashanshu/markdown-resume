@@ -1,3 +1,3 @@
 import { renovamen } from "@renovamen/eslint-config";
 
-export default renovamen();
+export default renovamen({ ignores: ["**/.wrangler"] });

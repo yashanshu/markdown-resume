@@ -1,5 +1,10 @@
 <template>
-  <button class="round-btn flex-shrink-0" :aria-label="$t('resumes.save')" :title="$t('resumes.save')" @click="save">
+  <button
+    class="round-btn flex-shrink-0"
+    :aria-label="$t('resumes.save')"
+    :title="$t('resumes.save')"
+    @click="save"
+  >
     <span i-ic:baseline-save md:text-lg />
   </button>
 </template>
