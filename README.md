@@ -116,6 +116,43 @@ cp site/.env.example site/.env
 | `NUXT_CLARITY_ID` | [Microsoft Clarity](https://clarity.microsoft.com/) Project ID. Enables session recording and heatmap analytics. Leave empty to disable Clarity. |
 | `NUXT_PUBLIC_DISQUS_SHORTNAME` | [Disqus](https://disqus.com/) shortname for your site. Enables the Disqus comment section. Leave empty to hide comments. |
 
+## AI Assistant (optional, self-hosted)
+
+The editor includes an owner-only AI chat panel that can edit the resume directly (auto-edit mode, every write snapshotted with Undo) or propose snippets you apply yourself (suggest mode). It stays hidden until a proxy token is pasted into Settings — visitors never see it.
+
+The panel talks to a small Cloudflare Worker in [`worker/`](worker/) that proxies two OpenAI-compatible upstreams — [OpenCode Go](https://opencode.ai/zen/go/v1) (`go`) and [OpenRouter](https://openrouter.ai/api/v1) (`openrouter`) — and can store chat history in D1. It is a dumb pipe: the client picks the upstream and the model; there is no routing or fallback logic.
+
+### Deploy the worker
+
+Run on your own machine with a Cloudflare account (fits the free tier):
+
+```bash
+pnpm install
+cd worker
+pnpm exec wrangler login
+pnpm exec wrangler d1 create markdown-resume-history   # paste the returned database id into wrangler.toml
+pnpm exec wrangler d1 migrations apply markdown-resume-history --remote
+pnpm exec wrangler secret put GO_API_KEY           # OpenCode Go key
+pnpm exec wrangler secret put OPENROUTER_API_KEY   # OpenRouter key
+pnpm exec wrangler secret put PROXY_TOKEN          # long random string — this is what you paste into Settings
+pnpm deploy
+```
+
+Then route a custom domain (e.g. `api.resume.hasufel.shop`) to the worker. In [`worker/wrangler.toml`](worker/wrangler.toml), set `SITE_ORIGIN` to your site's origin — the worker rejects requests from anywhere else — and optionally adjust `DAILY_REQUEST_CAP` (default `200`, fails closed).
+
+The client hard-codes the API base URL (`AI_API_BASE_URL` in [`site/src/utils/aiSettings.ts`](site/src/utils/aiSettings.ts)); change it if you host the worker elsewhere.
+
+Smoke-test a deployment from [`worker/`](worker/): `./verify.sh mock` (no keys needed) or `./verify.sh real` (real keys in `worker/.dev.vars`).
+
+### Turn it on in the editor
+
+1. Open **Settings → AI** and paste the `PROXY_TOKEN` value
+2. Pick a provider (`go` or `openrouter`) — the model list is fetched live from that provider
+3. Pick a model and an agent mode: **Auto-edit** (agent rewrites the resume, Undo restores the previous version) or **Suggest** (agent never writes; snippets get an **Apply** button)
+4. Optionally set history storage to **Server** to keep chats in the worker's D1 database (off by default)
+
+**Privacy:** resume content in AI chats transits the worker to the chosen provider, and with server history it is stored in its D1 database. This is an explicit exception to the local-only default above — without a pasted token nothing leaves the browser.
+
 ## Development
 
 Clone the repo and install dependencies:

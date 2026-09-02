@@ -1,6 +1,6 @@
 # AI Agent Integration — Sprint Plan (DRAFT)
 
-Status: Sprint 3 complete — chat panel + agent loop shipped; 19/19 local checks pass (mock upstream, `pnpm verify:ai` in `site/`), `pnpm build` green. Live end-to-end on both upstreams still needs the owner's token (run with the panel against the deployed worker, or `worker/verify.sh real`). Sprints 4 not started.
+Status: Sprint 4 in progress — items 2 (README setup docs) and 4 (error notices: missing/bad token, bad endpoint, rate limit, model 400) shipped; 27/27 local checks pass (`pnpm verify:ai` in `site/`). Remaining: item 1 deploy + item 3 Privacy/About honesty pass + item 5 live verify — deploy needs the owner's machine; live end-to-end on both upstreams still needs the owner's token (run with the panel against the deployed worker, or `worker/verify.sh real`).
 
 ## Decisions
 
@@ -67,9 +67,9 @@ Status: Sprint 3 complete — chat panel + agent loop shipped; 19/19 local check
 ### Sprint 4 — Deploy + honesty pass (~1 evening)
 
 1. Deploy (manual, on the owner's machine): site → Cloudflare Pages; worker → `pnpm deploy` in `worker/`, then custom domain `api.resume.hasufel.shop`
-2. README: setup docs (deploy worker, configure secrets, Settings walkthrough)
+2. **Done** — README: setup docs (deploy worker, configure secrets, Settings walkthrough)
 3. Privacy + About pages: AI section — owner-only, what transits (Go/OpenRouter), what's stored (D1 history)
-4. Error toasts: missing token, bad endpoint, rate limit, model 400 (some Go models are Anthropic-upstream — point the user at another model)
+4. **Done** — Error toasts: missing token, bad endpoint, rate limit, model 400 (some Go models are Anthropic-upstream — point the user at another model)
 5. Verify: live at `resume.hasufel.shop`, chat works over the internet on both upstreams, `pnpm build` passes
 
 ## Out of scope (for now)
