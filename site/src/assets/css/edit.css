@@ -30,6 +30,10 @@
   @apply w-12 bg-c border-l border-c;
 }
 
+.ai-chat-pane {
+  @apply hidden md:flex flex-none w-80 lg:w-96 h-full min-w-0 border-l border-c;
+}
+
 #vue-smart-pages-preview .vue-smart-page-break {
   @apply border-t-4;
   border-color: #e5e7eb !important;
@@ -76,6 +80,7 @@
   .header,
   .editor-pane,
   .tools-pane,
+  .ai-chat-pane,
   .zoom-bar,
   .toast-container,
   #nuxt-devtools-container {

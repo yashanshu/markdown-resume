@@ -133,3 +133,19 @@ notification:
   import:
     yes: 已成功导入数据！
     no : 数据格式不正确
+
+ai:
+  title: AI 助手
+  open: 打开 AI 聊天
+  empty: 向 AI 提问关于简历的任何问题。
+  placeholder: 关于你的简历提问…
+  send: 发送
+  stop: 停止
+  apply: 应用
+  undo: 撤销
+  undo_empty: 没有可撤销的更改
+  no_model: 请先在设置中选择模型
+  notice_write: 简历已更新
+  notice_degraded: 该模型不支持直接编辑——回复将以建议形式展示，由你自行应用。
+  notice_loop_abort: 已在 {max} 轮工具调用后停止——模型陷入循环，试试更具体的请求。
+  notice_error: 请求失败：{message}

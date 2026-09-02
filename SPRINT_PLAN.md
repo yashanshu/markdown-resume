@@ -1,6 +1,6 @@
 # AI Agent Integration — Sprint Plan (DRAFT)
 
-Status: Sprint 1 complete — worker + D1 foundation, 19/19 local checks pass (mock mode). Sprints 2–4 not started.
+Status: Sprint 3 complete — chat panel + agent loop shipped; 19/19 local checks pass (mock upstream, `pnpm verify:ai` in `site/`), `pnpm build` green. Live end-to-end on both upstreams still needs the owner's token (run with the panel against the deployed worker, or `worker/verify.sh real`). Sprints 4 not started.
 
 ## Decisions
 

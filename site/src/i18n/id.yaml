@@ -148,3 +148,19 @@ notification:
   import:
     yes: Data berhasil diimpor!
     no: Format data tidak valid.
+
+ai:
+  title: Asisten AI
+  open: Buka obrolan AI
+  empty: Tanyakan apa saja tentang resume Anda.
+  placeholder: Tanya tentang resume Anda…
+  send: Kirim
+  stop: Berhenti
+  apply: Terapkan
+  undo: Urungkan
+  undo_empty: Tidak ada lagi yang bisa diurungkan
+  no_model: Pilih model di Pengaturan dulu
+  notice_write: Resume diperbarui
+  notice_degraded: Model ini tidak bisa mengedit langsung — balasannya berupa saran yang Anda terapkan sendiri.
+  notice_loop_abort: Dihentikan setelah {max} putaran alat — model terus berulang. Coba permintaan yang lebih spesifik.
+  notice_error: 'Permintaan gagal: {message}'

@@ -148,3 +148,19 @@ notification:
   import:
     yes: Data has been successfully imported!
     no: Data format is invalid.
+
+ai:
+  title: AI assistant
+  open: Open AI chat
+  empty: Ask anything about your resume.
+  placeholder: Ask about your resume…
+  send: Send
+  stop: Stop
+  apply: Apply
+  undo: Undo
+  undo_empty: Nothing left to undo
+  no_model: Select a model in Settings first
+  notice_write: Resume updated
+  notice_degraded: This model can't edit directly — its replies are suggestions you apply yourself.
+  notice_loop_abort: Stopped after {max} tool rounds — the model kept looping. Try a more specific request.
+  notice_error: 'Request failed: {message}'

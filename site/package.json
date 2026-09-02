@@ -6,6 +6,7 @@
     "build": "nuxt generate",
     "dev": "nuxt dev",
     "serve": "nuxt preview",
+    "verify:ai": "pnpm dlx tsx verify-ai.ts",
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
@@ -51,5 +52,9 @@
     "pinia": "^2.1.7",
     "ts-debounce": "^4.0.0",
     "vue-smart-pages": "workspace:*"
+  },
+  "dependencies": {
+    "@ai-sdk/openai-compatible": "^3.0.43",
+    "ai": "^7.0.90"
   }
 }

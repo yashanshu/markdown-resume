@@ -133,3 +133,19 @@ notification:
   import:
     yes: Datos importados correctamente!
     no : Formato de datos inválido.
+
+ai:
+  title: Asistente de IA
+  open: Abrir chat de IA
+  empty: Pregunta lo que quieras sobre tu currículum.
+  placeholder: Pregunta sobre tu currículum…
+  send: Enviar
+  stop: Detener
+  apply: Aplicar
+  undo: Deshacer
+  undo_empty: No queda nada por deshacer
+  no_model: Elige primero un modelo en Ajustes
+  notice_write: Currículum actualizado
+  notice_degraded: Este modelo no puede editar directamente — sus respuestas son sugerencias que aplicas tú.
+  notice_loop_abort: Detenido tras {max} rondas de herramientas — el modelo seguía en bucle. Prueba una petición más concreta.
+  notice_error: 'Error en la petición: {message}'

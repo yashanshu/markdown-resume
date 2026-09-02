@@ -16,11 +16,19 @@
         </div>
       </div>
 
+      <div v-if="isAiChatOpen" class="ai-chat-pane">
+        <AiChat @close="isAiChatOpen = false" />
+      </div>
+
       <div class="tools-pane" :class="{ 'tools-pane--collapsed': !isToolbarOpen }">
         <div v-if="isToolbarOpen" class="tools-pane-header">
           <span i-ep:document flex-shrink-0 text-lg />
           <RenameResume />
           <SaveResume />
+          <ToggleAiChat
+            :is-open="isAiChatOpen"
+            @toggle-ai-chat="isAiChatOpen = !isAiChatOpen"
+          />
           <ToggleToolbar
             :is-toolbar-open="isToolbarOpen"
             @toggle-toolbar="isToolbarOpen = !isToolbarOpen"
@@ -34,6 +42,10 @@
               @toggle-toolbar="isToolbarOpen = true"
             />
             <SaveResume />
+            <ToggleAiChat
+              :is-open="isAiChatOpen"
+              @toggle-ai-chat="isAiChatOpen = !isAiChatOpen"
+            />
             <button
               v-for="action in exportActions"
               :key="action.label"
@@ -83,6 +95,9 @@ const route = useRoute();
 
 // Toogle toolbar
 const isToolbarOpen = ref(false);
+
+// AI chat panel (owner-only: requires a proxy token, see Settings)
+const isAiChatOpen = ref(false);
 
 onMounted(async () => {
   layoutMediaQuery = window.matchMedia("(max-width: 768px)");
