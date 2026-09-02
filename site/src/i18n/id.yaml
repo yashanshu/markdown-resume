@@ -164,3 +164,7 @@ ai:
   notice_degraded: Model ini tidak bisa mengedit langsung — balasannya berupa saran yang Anda terapkan sendiri.
   notice_loop_abort: Dihentikan setelah {max} putaran alat — model terus berulang. Coba permintaan yang lebih spesifik.
   notice_error: 'Permintaan gagal: {message}'
+  notice_bad_token: Token proxy hilang atau tidak valid — tempelkan dulu di Pengaturan → AI
+  notice_bad_endpoint: Tidak dapat menghubungi proxy AI — pastikan worker sudah dideploy dan dapat diakses
+  notice_rate_limit: Batas laju tercapai — kap harian proxy atau kuota penyedia sudah habis; coba lagi nanti atau ganti penyedia di Pengaturan
+  notice_model_error: 'Model menolak permintaan: {message} — coba model lain di Pengaturan (beberapa model tidak mendukung tool call)'

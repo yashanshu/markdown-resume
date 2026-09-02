@@ -87,7 +87,34 @@ export const extractSuggestion = (text: string): string | null => {
   return m ? m[1].trim() : null;
 };
 
-export type AgentNoticeCode = "loop-abort" | "degraded" | "error";
+export type AgentNoticeCode =
+  | "loop-abort"
+  | "degraded"
+  | "error"
+  | "bad-token"
+  | "bad-endpoint"
+  | "rate-limit"
+  | "model-error";
+
+/**
+ * Map a worker/upstream error to a notice code: 401 = missing/wrong proxy
+ * token, 429/402 = rate or credit limit, 400 = the model rejected the
+ * request, 403/404/5xx/unreachable = endpoint problem, anything else stays
+ * generic. Retryable statuses are unwrapped from the SDK's RetryError first.
+ */
+export const agentErrorNoticeCode = (error: unknown): AgentNoticeCode => {
+  const e = error as { statusCode?: unknown; message?: unknown; lastError?: unknown };
+  // retryable statuses (429/5xx) arrive wrapped in a RetryError after SDK retries
+  if (e?.lastError) return agentErrorNoticeCode(e.lastError);
+  const status = typeof e?.statusCode === "number" ? e.statusCode : undefined;
+  if (status === 401) return "bad-token";
+  if (status === 429 || status === 402) return "rate-limit";
+  if (status === 400) return "model-error";
+  if (status === 403 || status === 404 || (status ?? 0) >= 500) return "bad-endpoint";
+  if (/fetch|network|ENOTFOUND|ECONNREFUSED|timeout/i.test(String(e?.message ?? "")))
+    return "bad-endpoint";
+  return "error";
+};
 
 export type AgentEvent =
   | { type: "text-delta"; text: string }
@@ -230,7 +257,7 @@ export const runAgentTurn = async (opts: AgentTurnOptions): Promise<AgentTurnRes
   if (streamError && !opts.signal?.aborted) {
     opts.onEvent?.({
       type: "notice",
-      code: "error",
+      code: agentErrorNoticeCode(streamError),
       detail: streamError instanceof Error ? streamError.message : String(streamError)
     });
   }

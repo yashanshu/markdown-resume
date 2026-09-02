@@ -5,6 +5,7 @@
 import { createServer } from "node:http";
 import {
   MAX_TOOL_ITERATIONS,
+  agentErrorNoticeCode,
   applySuggestion,
   extractSuggestion,
   runAgentTurn,
@@ -80,6 +81,16 @@ const server = createServer((req, res) => {
           error: { message: "this model does not support tools or function calling" }
         })
       );
+      return;
+    }
+    if (parsed.model === "rate-limit-model") {
+      res.writeHead(429, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ error: { message: "daily request cap reached" } }));
+      return;
+    }
+    if (parsed.model === "bad-model") {
+      res.writeHead(400, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ error: { message: "invalid model id" } }));
       return;
     }
     if (parsed.model === "editor-model") {
@@ -236,6 +247,40 @@ const main = async () => {
     applySuggestion("# A\n\nx", "# New\n\ny") === "# A\n\nx\n\n# New\n\ny"
   );
   check("extract null without fence", extractSuggestion("no code here") === null);
+
+  // 7. error classification: upstream statuses -> specific notice codes
+  const events7: AgentEvent[] = [];
+  await run({ model: "rate-limit-model", onEvent: (e) => events7.push(e) });
+  check("429 -> rate-limit notice", noticesOf(events7).includes("rate-limit"));
+
+  const events7b: AgentEvent[] = [];
+  await run({ model: "bad-model", mode: "auto-edit", onEvent: (e) => events7b.push(e) });
+  check("400 (non-tool) -> model-error notice", noticesOf(events7b).includes("model-error"));
+
+  const events7c: AgentEvent[] = [];
+  await run({ token: "wrong-token", onEvent: (e) => events7c.push(e) });
+  check("401 -> bad-token notice", noticesOf(events7c).includes("bad-token"));
+
+  check(
+    "403 -> bad-endpoint",
+    agentErrorNoticeCode({ statusCode: 403 }) === "bad-endpoint"
+  );
+  check(
+    "503 -> bad-endpoint",
+    agentErrorNoticeCode({ statusCode: 503 }) === "bad-endpoint"
+  );
+  check(
+    "network error -> bad-endpoint",
+    agentErrorNoticeCode(new TypeError("fetch failed")) === "bad-endpoint"
+  );
+  check(
+    "402 -> rate-limit",
+    agentErrorNoticeCode({ statusCode: 402 }) === "rate-limit"
+  );
+  check(
+    "RetryError-wrapped 429 -> rate-limit",
+    agentErrorNoticeCode({ lastError: { statusCode: 429 } }) === "rate-limit"
+  );
 
   server.close();
   console.log();

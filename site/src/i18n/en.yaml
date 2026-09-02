@@ -164,3 +164,7 @@ ai:
   notice_degraded: This model can't edit directly — its replies are suggestions you apply yourself.
   notice_loop_abort: Stopped after {max} tool rounds — the model kept looping. Try a more specific request.
   notice_error: 'Request failed: {message}'
+  notice_bad_token: Missing or invalid proxy token — paste it into Settings → AI first
+  notice_bad_endpoint: Can't reach the AI proxy — check that the worker is deployed and reachable
+  notice_rate_limit: Rate limit reached — the proxy's daily cap or the provider's quota was hit; try again later or switch provider in Settings
+  notice_model_error: 'The model rejected the request: {message} — try another model in Settings (some models don''t support tool calls)'

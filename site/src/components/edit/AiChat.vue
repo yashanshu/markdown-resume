@@ -38,7 +38,7 @@
         <div v-else-if="item.role === 'notice'" class="ai-notice">
           <span
             :class="
-              item.code === 'error'
+              errorCodes.has(item.code)
                 ? 'i-mdi:alert-circle-outline'
                 : 'i-mdi:information-outline'
             "
@@ -95,6 +95,8 @@
 <script lang="ts" setup>
 import type { ModelMessage } from "ai";
 import {
+  MAX_TOOL_ITERATIONS,
+  agentErrorNoticeCode,
   aiHistoryEnabled,
   applySuggestion,
   ensureAiSession,
@@ -142,6 +144,30 @@ let abort: AbortController | undefined;
 const modeLabelKey = computed(() =>
   mode.value === "auto-edit" ? "settings.ai_mode_auto_edit" : "settings.ai_mode_suggest"
 );
+
+const noticeKeys: Record<AgentNoticeCode, string> = {
+  "loop-abort": "ai.notice_loop_abort",
+  degraded: "ai.notice_degraded",
+  error: "ai.notice_error",
+  "bad-token": "ai.notice_bad_token",
+  "bad-endpoint": "ai.notice_bad_endpoint",
+  "rate-limit": "ai.notice_rate_limit",
+  "model-error": "ai.notice_model_error"
+};
+
+const errorCodes = new Set([
+  "error",
+  "bad-token",
+  "bad-endpoint",
+  "rate-limit",
+  "model-error"
+]);
+
+const noticeText = (code: AgentNoticeCode, detail?: string): string => {
+  const params: Record<string, string | number> = { message: detail ?? "" };
+  if (code === "loop-abort") params.max = MAX_TOOL_ITERATIONS;
+  return t(noticeKeys[code], params);
+};
 
 const push = (item: Omit<ChatItem, "id">): ChatItem => {
   const full = { ...item, id: nextId++ };
@@ -200,8 +226,13 @@ const onEnter = (e: KeyboardEvent) => {
 
 const send = async () => {
   const text = input.value.trim();
+  if (!text || isRunning.value) return;
   const token = getAiToken();
-  if (!text || isRunning.value || !token) return;
+  if (!token) {
+    push({ role: "notice", code: "bad-token", text: noticeText("bad-token") });
+    scrollToBottom();
+    return;
+  }
 
   mode.value = getAiAgentMode();
   if (!getAiModel()) {
@@ -225,22 +256,8 @@ const send = async () => {
       canUndo.value = true;
       push({ role: "notice", code: "write", text: t("ai.notice_write") });
       scrollToBottom();
-    } else if (e.code === "error") {
-      push({
-        role: "notice",
-        code: "error",
-        text: t("ai.notice_error", { message: e.detail ?? "" })
-      });
-      scrollToBottom();
-    } else if (e.code === "degraded") {
-      push({ role: "notice", code: "degraded", text: t("ai.notice_degraded") });
-      scrollToBottom();
     } else {
-      push({
-        role: "notice",
-        code: "loop-abort",
-        text: t("ai.notice_loop_abort", { max: 8 })
-      });
+      push({ role: "notice", code: e.code, text: noticeText(e.code, e.detail) });
       scrollToBottom();
     }
   };
@@ -260,10 +277,11 @@ const send = async () => {
       onEvent
     });
   } catch (e) {
+    const code = agentErrorNoticeCode(e);
     push({
       role: "notice",
-      code: "error",
-      text: t("ai.notice_error", { message: e instanceof Error ? e.message : String(e) })
+      code,
+      text: noticeText(code, e instanceof Error ? e.message : String(e))
     });
     scrollToBottom();
     return;

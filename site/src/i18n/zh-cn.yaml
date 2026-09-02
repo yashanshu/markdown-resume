@@ -149,3 +149,7 @@ ai:
   notice_degraded: 该模型不支持直接编辑——回复将以建议形式展示，由你自行应用。
   notice_loop_abort: 已在 {max} 轮工具调用后停止——模型陷入循环，试试更具体的请求。
   notice_error: 请求失败：{message}
+  notice_bad_token: 代理令牌缺失或无效——请先在 设置 → AI 中粘贴
+  notice_bad_endpoint: 无法连接 AI 代理——请确认 worker 已部署且可访问
+  notice_rate_limit: 已达限流——代理每日上限或提供商配额已用完；稍后再试或在设置中切换提供商
+  notice_model_error: 模型拒绝了请求：{message}——请在设置中换一个模型（部分模型不支持工具调用）

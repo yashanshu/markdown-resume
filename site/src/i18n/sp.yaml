@@ -149,3 +149,7 @@ ai:
   notice_degraded: Este modelo no puede editar directamente — sus respuestas son sugerencias que aplicas tú.
   notice_loop_abort: Detenido tras {max} rondas de herramientas — el modelo seguía en bucle. Prueba una petición más concreta.
   notice_error: 'Error en la petición: {message}'
+  notice_bad_token: Falta el token del proxy o no es válido — pégalo primero en Ajustes → IA
+  notice_bad_endpoint: No se puede conectar con el proxy de IA — comprueba que el worker esté desplegado y accesible
+  notice_rate_limit: Límite alcanzado — el tope diario del proxy o la cuota del proveedor se agotó; prueba más tarde o cambia de proveedor en Ajustes
+  notice_model_error: 'El modelo rechazó la petición: {message} — prueba otro modelo en Ajustes (algunos no soportan tool calls)'
