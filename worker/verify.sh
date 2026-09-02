@@ -78,7 +78,12 @@ code() { curl -s -o /dev/null -w "%{http_code}" "$@"; }
 
 expect "no token -> 401" 401 "$(code "$BASE/go/v1/models")"
 expect "bad origin -> 403" 403 "$(code -H "$AUTH" -H "Origin: https://evil.example" "$BASE/go/v1/models")"
-expect "preflight -> 204" 204 "$(code -X OPTIONS -H "Origin: ${ORIGIN}" -H "Access-Control-Request-Method: POST" "$BASE/go/v1/chat/completions")"
+PREFLIGHT="$(curl -si -X OPTIONS -H "Origin: ${ORIGIN}" -H "Access-Control-Request-Method: POST" -H "Access-Control-Request-Headers: authorization,content-type,user-agent" "$BASE/go/v1/chat/completions")"
+expect "preflight -> 204" 204 "$(printf '%s' "$PREFLIGHT" | head -n 1 | awk '{print $2}')"
+case "$(printf '%s' "$PREFLIGHT" | tr '[:upper:]' '[:lower:]')" in
+  *"access-control-allow-headers:"*"user-agent"*) pass "preflight allows user-agent" ;;
+  *) fail "preflight allows user-agent" ;;
+esac
 
 GO_MODELS="$(curl -s -H "$AUTH" -H "Origin: ${ORIGIN}" "$BASE/go/v1/models")"
 expect "go models" "mock-model" "$(printf '%s' "$GO_MODELS" | jsonget data.0.id)"
