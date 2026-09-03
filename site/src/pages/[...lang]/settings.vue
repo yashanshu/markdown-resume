@@ -155,7 +155,7 @@
 
         <section class="settings-card md:col-span-2">
           <div class="settings-card-heading">
-            <span i-mdi:robot-outline text-xl />
+            <span i-mdi:auto-fix text-xl />
             <h2>{{ $t("settings.ai") }}</h2>
           </div>
           <p class="storage-description">

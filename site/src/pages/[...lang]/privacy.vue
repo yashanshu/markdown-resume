@@ -38,15 +38,15 @@
         </section>
 
         <section>
-          <h2>AI assistant (optional, off by default)</h2>
+          <h2>AI writing assistance (optional, off by default)</h2>
           <p>
-            The editor can include an AI chat panel that edits or suggests changes to your
-            résumé. It stays hidden until a proxy token is pasted into
-            <strong>Settings</strong>. Without that token the panel never appears and
+            The editor can include AI writing tools that edit or suggest changes to your
+            résumé. They stay hidden until a proxy token is pasted into
+            <strong>Settings</strong>. Without that token the tools never appear and
             nothing in this section applies to you.
           </p>
           <p>
-            When it is enabled, what you type in the panel — including any résumé content
+            When enabled, what you type in the editor tool — including any résumé content
             the assistant reads or writes — is sent to a self-hosted Cloudflare Worker,
             which forwards it to the AI provider you pick in Settings:
             <a href="https://opencode.ai" target="_blank" rel="noopener">OpenCode Go</a>

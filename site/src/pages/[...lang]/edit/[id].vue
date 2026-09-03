@@ -6,7 +6,17 @@
       <div v-if="!isSplitterReady" class="min-w-0 flex-1" />
       <div v-else v-bind="api.rootProps" px-3>
         <div class="editor-pane" v-bind="api.getPanelProps({ id: 'editor' })">
-          <Editor />
+          <div class="editor-workspace-shell">
+            <div class="editor-pane-document">
+              <Editor
+                :is-ai-open="isAiEditorOpen"
+                @toggle-ai="isAiEditorOpen = !isAiEditorOpen"
+              />
+            </div>
+            <div v-if="isAiEditorOpen" class="ai-edit-pane">
+              <AiChat @close="isAiEditorOpen = false" />
+            </div>
+          </div>
         </div>
 
         <div v-bind="api.getResizeTriggerProps({ id: 'editor:preview' })" />
@@ -16,19 +26,11 @@
         </div>
       </div>
 
-      <div v-if="isAiChatOpen" class="ai-chat-pane">
-        <AiChat @close="isAiChatOpen = false" />
-      </div>
-
       <div class="tools-pane" :class="{ 'tools-pane--collapsed': !isToolbarOpen }">
         <div v-if="isToolbarOpen" class="tools-pane-header">
           <span i-ep:document flex-shrink-0 text-lg />
           <RenameResume />
           <SaveResume />
-          <ToggleAiChat
-            :is-open="isAiChatOpen"
-            @toggle-ai-chat="isAiChatOpen = !isAiChatOpen"
-          />
           <ToggleToolbar
             :is-toolbar-open="isToolbarOpen"
             @toggle-toolbar="isToolbarOpen = !isToolbarOpen"
@@ -42,10 +44,6 @@
               @toggle-toolbar="isToolbarOpen = true"
             />
             <SaveResume />
-            <ToggleAiChat
-              :is-open="isAiChatOpen"
-              @toggle-ai-chat="isAiChatOpen = !isAiChatOpen"
-            />
             <button
               v-for="action in exportActions"
               :key="action.label"
@@ -96,8 +94,8 @@ const route = useRoute();
 // Toogle toolbar
 const isToolbarOpen = ref(false);
 
-// AI chat panel (owner-only: requires a proxy token, see Settings)
-const isAiChatOpen = ref(false);
+// Writing assistance (owner-only: requires a proxy token, see Settings)
+const isAiEditorOpen = ref(false);
 
 onMounted(async () => {
   layoutMediaQuery = window.matchMedia("(max-width: 768px)");

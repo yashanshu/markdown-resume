@@ -32,15 +32,15 @@ settings:
   resumes: 简历
   images: 图片
   storage_unavailable: 此浏览器不支持存储空间估算。
-  ai: AI 助手
-  ai_description: 编辑器内 AI 聊天面板的拥有者专属设置。设置代理令牌后面板才会启用。
+  ai: 写作辅助
+  ai_description: 配置编辑器内置的可选写作工具。设置代理令牌后工具才会显示。
   ai_token: 代理令牌
   ai_token_placeholder: 粘贴代理令牌
   ai_provider: 提供商
   ai_model: 模型
   ai_agent_mode: 代理模式
-  ai_mode_auto_edit: 自动编辑
-  ai_mode_suggest: 建议
+  ai_mode_auto_edit: 直接修改
+  ai_mode_suggest: 仅提供建议
   ai_history: 聊天记录
   ai_history_server: 保存到服务器
   ai_history_off: 关闭
@@ -135,17 +135,20 @@ notification:
     no : 数据格式不正确
 
 ai:
-  title: AI 助手
-  open: 打开 AI 聊天
-  empty: 向 AI 提问关于简历的任何问题。
-  placeholder: 关于你的简历提问…
-  send: 发送
+  title: 改进文字
+  open: 改进
+  empty: 描述你想要的修改。每项更改都可以检查和撤销。
+  placeholder: 描述一项修改…
+  send: 修改
   stop: 停止
-  apply: 应用
+  apply: 应用更改
   undo: 撤销
+  keep: 完成
+  review_title: 请在文档中检查这项更改。
   undo_empty: 没有可撤销的更改
   no_model: 请先在设置中选择模型
-  notice_write: 简历已更新
+  notice_write: 更改已就绪，请检查
+  notice_undo: 已撤销更改
   notice_degraded: 该模型不支持直接编辑——回复将以建议形式展示，由你自行应用。
   notice_loop_abort: 已在 {max} 轮工具调用后停止——模型陷入循环，试试更具体的请求。
   notice_error: 请求失败：{message}

@@ -1,5 +1,5 @@
 <template>
-  <div class="pane-container" v-bind="api.rootProps">
+  <div class="editor-document" v-bind="api.rootProps">
     <div
       v-bind="api.listProps"
       class="hstack h-9 text-sm md:(h-10 text-base) w-full text-c bg-c border-b border-c px-4 space-x-2"
@@ -16,9 +16,21 @@
           class="absolute w-full h-0.4 bg-blue-500 dark:bg-blue-400 left-0 bottom-0 rounded"
         />
       </button>
+      <div class="flex-1" />
+      <button
+        v-if="isAiEnabled"
+        class="editor-ai-trigger"
+        :class="{ 'editor-ai-trigger--active': isAiOpen }"
+        :aria-expanded="isAiOpen"
+        :aria-label="isAiOpen ? $t('toolbar.close') : $t('ai.open')"
+        @click="$emit('toggleAi')"
+      >
+        <span i-mdi:auto-fix flex-shrink-0 />
+        <span>{{ $t("ai.open") }}</span>
+      </button>
     </div>
 
-    <div ref="editorRef" h-full />
+    <div ref="editorRef" class="min-h-0 flex-1" />
   </div>
 </template>
 
@@ -29,7 +41,11 @@ import { normalizeProps, useMachine } from "@zag-js/vue";
 import { isClient } from "@renovamen/utils";
 import { setupMonacoEditor } from "~/monaco";
 
+defineProps<{ isAiOpen: boolean }>();
+defineEmits<{ (e: "toggleAi"): void }>();
+
 const editorRef = ref<HTMLDivElement>();
+const isAiEnabled = ref(false);
 
 let editor:
   | {
@@ -47,6 +63,7 @@ let editor:
 
 // Setup Monaco editor
 onMounted(async () => {
+  isAiEnabled.value = getAiToken() !== "";
   if (isClient && editorRef.value && !editor) {
     editor = await setupMonacoEditor(editorRef.value);
     activate("markdown");
@@ -100,3 +117,17 @@ const [state, send] = useMachine(
 );
 const api = computed(() => tabs.connect(state.value, send, normalizeProps));
 </script>
+
+<style scoped>
+.editor-document {
+  @apply flex h-full min-h-0 flex-col bg-c;
+}
+
+.editor-ai-trigger {
+  @apply hstack flex-none gap-1.5 rounded px-2 py-1 text-xs text-light-c hover:bg-darker-c md:text-sm;
+}
+
+.editor-ai-trigger--active {
+  @apply bg-darker-c text-c;
+}
+</style>

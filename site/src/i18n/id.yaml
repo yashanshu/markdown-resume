@@ -40,15 +40,15 @@ settings:
   erase_warning: Tindakan ini akan menghapus semua data dan mengembalikan aplikasi ke keadaan awal. Tindakan ini tidak dapat dibatalkan.
   type_delete: Ketik DELETE untuk mengonfirmasi.
   confirm: Konfirmasi
-  ai: Asisten AI
-  ai_description: Pengaturan khusus pemilik untuk panel obrolan AI di editor. Panel aktif setelah token proksi diisi.
+  ai: Bantuan menulis
+  ai_description: Atur alat menulis opsional yang menyatu dengan editor. Alat muncul setelah token proksi diisi.
   ai_token: Token proksi
   ai_token_placeholder: Tempel token proksi
   ai_provider: Penyedia
   ai_model: Model
   ai_agent_mode: Mode agen
-  ai_mode_auto_edit: Edit otomatis
-  ai_mode_suggest: Saran
+  ai_mode_auto_edit: Buat perubahan
+  ai_mode_suggest: Saran saja
   ai_history: Riwayat obrolan
   ai_history_server: Simpan di server
   ai_history_off: Mati
@@ -150,17 +150,20 @@ notification:
     no: Format data tidak valid.
 
 ai:
-  title: Asisten AI
-  open: Buka obrolan AI
-  empty: Tanyakan apa saja tentang resume Anda.
-  placeholder: Tanya tentang resume Anda…
-  send: Kirim
+  title: Perbaiki tulisan
+  open: Perbaiki
+  empty: Jelaskan perubahan. Anda dapat meninjau dan mengurungkan setiap perubahan.
+  placeholder: Jelaskan perubahan…
+  send: Buat perubahan
   stop: Berhenti
-  apply: Terapkan
+  apply: Terapkan perubahan
   undo: Urungkan
+  keep: Selesai
+  review_title: Tinjau perubahan di dokumen Anda.
   undo_empty: Tidak ada lagi yang bisa diurungkan
   no_model: Pilih model di Pengaturan dulu
-  notice_write: Resume diperbarui
+  notice_write: Perubahan siap ditinjau
+  notice_undo: Perubahan diurungkan
   notice_degraded: Model ini tidak bisa mengedit langsung — balasannya berupa saran yang Anda terapkan sendiri.
   notice_loop_abort: Dihentikan setelah {max} putaran alat — model terus berulang. Coba permintaan yang lebih spesifik.
   notice_error: 'Permintaan gagal: {message}'

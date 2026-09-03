@@ -1,10 +1,12 @@
 # AI Agent Integration — Sprint Plan (DRAFT)
 
+Follow-up redesign sprint: [Native AI Editing — Detailed Sprint Session](./AI_NATIVE_EDITING_SPRINT.md)
+
 Status: Sprint 4 code-complete — items 2 (README setup docs), 3 (Privacy/About AI honesty pass) and 4 (error notices: missing/bad token, bad endpoint, rate limit, model 400) shipped. Local checks all green: `pnpm build` passes, 27/27 in `site/` (`pnpm verify:ai`), 20/20 in `worker/` (`./verify.sh mock`). Remaining are the two owner-machine steps: item 1 deploy (wrangler auth + secrets + Pages) and item 5 live end-to-end on both upstreams — run the panel against the deployed worker, or `worker/verify.sh real` with real keys in `worker/.dev.vars`.
 
 ## Decisions
 
-- **Agent role**: chat panel beside the editor with a user-selectable mode:
+- **Agent role**: writing tools docked inside the editor with a user-selectable mode:
   - **auto-edit** — agent can read and rewrite the resume markdown via tool calls; changes show in live preview
   - **suggest** — agent never writes; it proposes snippets with an "Apply" button, the user triggers the write
 - **Access**: proxy only, owner use — the AI panel activates when the owner pastes the `PROXY_TOKEN` in Settings. Public users see no AI features. BYOK is deferred (see bottom).
@@ -51,7 +53,7 @@ Status: Sprint 4 code-complete — items 2 (README setup docs), 3 (Privacy/About
 
 ### Sprint 3 — Chat panel + agent loop (core, ~a weekend)
 
-1. `site/src/components/edit/AiChat.vue` panel in the editor: message list, input, streaming output
+1. `site/src/components/edit/AiChat.vue` tray inside the document editor: activity list, input, streaming output, and in-context review/undo
 2. `site/src/utils/ai.ts`: Vercel AI SDK request builder + tool loop, tools `get_resume` / `set_resume`
 3. Guards:
    - `MAX_TOOL_ITERATIONS = 8`; abort with an explanatory message

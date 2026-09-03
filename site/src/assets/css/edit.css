@@ -22,16 +22,29 @@
   @apply bg-c;
 }
 
+.editor-pane {
+  @apply min-h-0 overflow-hidden;
+}
+
+.editor-workspace-shell {
+  @apply flex h-full min-h-0 flex-col overflow-hidden rounded-xl bg-c;
+}
+
+.editor-pane-document {
+  @apply min-h-0 flex-1;
+}
+
+.ai-edit-pane {
+  @apply min-h-56 flex-none border-t border-c bg-c;
+  height: min(22rem, 46%);
+}
+
 .tools-pane {
   @apply flex flex-col flex-none w-72 max-w-72 h-full overflow-hidden transition-all duration-200;
 }
 
 .tools-pane--collapsed {
   @apply w-12 bg-c border-l border-c;
-}
-
-.ai-chat-pane {
-  @apply hidden md:flex flex-none w-80 lg:w-96 h-full min-w-0 border-l border-c;
 }
 
 #vue-smart-pages-preview .vue-smart-page-break {
@@ -80,7 +93,7 @@
   .header,
   .editor-pane,
   .tools-pane,
-  .ai-chat-pane,
+  .ai-edit-pane,
   .zoom-bar,
   .toast-container,
   #nuxt-devtools-container {

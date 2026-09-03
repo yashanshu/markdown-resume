@@ -1,15 +1,16 @@
 <template>
-  <div class="ai-chat pane-container" flex="~ col" bg-c text-c>
+  <div class="ai-editor" flex="~ col" bg-c text-c>
     <div class="hstack h-9 md:h-10 flex-none gap-2 px-3 border-b border-c text-sm">
-      <span i-mdi:robot-outline flex-shrink-0 />
+      <span i-mdi:auto-fix flex-shrink-0 />
       <span font-bold>{{ $t("ai.title") }}</span>
       <span class="ai-mode">{{ $t(modeLabelKey) }}</span>
       <div class="flex-1" />
       <button
+        v-if="canUndo && !reviewPending"
         class="round-btn flex-shrink-0"
         :aria-label="$t('ai.undo')"
         :title="$t('ai.undo')"
-        :disabled="isRunning || !canUndo"
+        :disabled="isRunning"
         @click="undo"
       >
         <span i-mdi:undo-variant md:text-lg />
@@ -24,6 +25,21 @@
       </button>
     </div>
 
+    <div v-if="reviewPending" class="ai-review">
+      <span i-mdi:file-document-edit-outline flex-shrink-0 />
+      <span class="min-w-0 flex-1" role="status">{{ $t("ai.review_title") }}</span>
+      <button class="ai-review-action" :disabled="isRunning" @click="undo">
+        {{ $t("ai.undo") }}
+      </button>
+      <button
+        class="ai-review-action ai-review-action--primary"
+        :disabled="isRunning"
+        @click="keepEdit"
+      >
+        {{ $t("ai.keep") }}
+      </button>
+    </div>
+
     <div
       ref="listRef"
       class="ai-messages min-h-0 flex-1 overflow-y-auto px-3 py-2 space-y-2"
@@ -31,7 +47,7 @@
       <p v-if="!items.length" class="ai-empty">{{ $t("ai.empty") }}</p>
 
       <div v-for="item in items" :key="item.id">
-        <p v-if="item.role === 'user'" class="ai-bubble ai-bubble--user">
+        <p v-if="item.role === 'user'" class="ai-request">
           {{ item.text }}
         </p>
 
@@ -47,7 +63,7 @@
           <span>{{ item.text }}</span>
         </div>
 
-        <div v-else class="ai-bubble ai-bubble--assistant">
+        <div v-else class="ai-response">
           <p class="whitespace-pre-wrap">{{ item.text || (isRunning ? "…" : "") }}</p>
           <div v-if="item.suggestion" class="ai-suggestion">
             <pre class="ai-snippet">{{ item.suggestion }}</pre>
@@ -101,6 +117,7 @@ import {
   applySuggestion,
   ensureAiSession,
   extractSuggestion,
+  hasUndoSnapshot,
   loadAiHistory,
   popUndoSnapshot,
   pushUndoSnapshot,
@@ -134,7 +151,8 @@ const listRef = ref<HTMLElement>();
 const items = ref<ChatItem[]>([]);
 const input = ref("");
 const isRunning = ref(false);
-const canUndo = ref(true);
+const canUndo = ref(false);
+const reviewPending = ref(false);
 
 let nextId = 1;
 let history: ModelMessage[] = [];
@@ -197,25 +215,28 @@ const applySnippet = async (item: ChatItem) => {
   if (await writeResume(applySuggestion(data.mdContent, item.suggestion))) {
     item.suggestion = undefined;
     canUndo.value = true;
+    reviewPending.value = true;
   }
+};
+
+const keepEdit = () => {
+  reviewPending.value = false;
 };
 
 const undo = async () => {
   if (isRunning.value) return;
-  for (;;) {
-    const snap = await popUndoSnapshot();
-    if (!snap) {
-      canUndo.value = false;
-      push({ role: "notice", text: t("ai.undo_empty"), code: "error" });
-      scrollToBottom();
-      return;
-    }
-    if (snap.resumeId === null || snap.resumeId === data.curResumeId) {
-      setResumeMd(snap.markdown);
-      scrollToBottom();
-      return;
-    }
+  const snap = await popUndoSnapshot(data.curResumeId);
+  if (!snap) {
+    canUndo.value = false;
+    push({ role: "notice", text: t("ai.undo_empty"), code: "error" });
+    scrollToBottom();
+    return;
   }
+  setResumeMd(snap.markdown);
+  reviewPending.value = false;
+  canUndo.value = await hasUndoSnapshot(data.curResumeId);
+  push({ role: "notice", text: t("ai.notice_undo"), code: "write" });
+  scrollToBottom();
 };
 
 const stop = () => abort?.abort();
@@ -254,6 +275,7 @@ const send = async () => {
       scrollToBottom();
     } else if (e.type === "tool-write") {
       canUndo.value = true;
+      reviewPending.value = true;
       push({ role: "notice", code: "write", text: t("ai.notice_write") });
       scrollToBottom();
     } else {
@@ -309,6 +331,7 @@ const send = async () => {
 
 onMounted(async () => {
   mode.value = getAiAgentMode();
+  canUndo.value = await hasUndoSnapshot(data.curResumeId);
   const token = getAiToken();
   if (token && aiHistoryEnabled()) {
     try {
@@ -321,7 +344,7 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.ai-chat {
+.ai-editor {
   @apply w-full h-full text-sm;
 }
 
@@ -333,16 +356,12 @@ onMounted(async () => {
   @apply text-light-c text-center mt-6;
 }
 
-.ai-bubble {
-  @apply rounded-lg px-3 py-2 border border-c;
+.ai-request {
+  @apply ml-6 border-l-2 border-blue-500/50 pl-3 text-c;
 }
 
-.ai-bubble--user {
-  @apply bg-blue-500/10 border-blue-500/30;
-}
-
-.ai-bubble--assistant {
-  @apply bg-c;
+.ai-response {
+  @apply px-1 py-1 text-c;
 }
 
 .ai-notice {
@@ -363,5 +382,17 @@ onMounted(async () => {
 
 .ai-input {
   @apply flex-1 resize-none bg-c border border-c rounded px-2 py-1.5 outline-none focus:border-blue-500 disabled:opacity-60;
+}
+
+.ai-review {
+  @apply hstack flex-none gap-2 border-b border-blue-500/30 bg-blue-500/8 px-3 py-2 text-xs md:text-sm;
+}
+
+.ai-review-action {
+  @apply rounded px-2 py-1 hover:bg-darker-c disabled:opacity-50;
+}
+
+.ai-review-action--primary {
+  @apply bg-blue-500 text-white hover:bg-blue-600;
 }
 </style>

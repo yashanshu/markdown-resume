@@ -32,15 +32,15 @@ settings:
   resumes: Currículums
   images: Imágenes
   storage_unavailable: Las estimaciones de almacenamiento no están disponibles.
-  ai: Asistente de IA
-  ai_description: Ajustes exclusivos del propietario para el panel de chat de IA del editor. El panel se activa al configurar un token de proxy.
+  ai: Ayuda de escritura
+  ai_description: Configura las herramientas de escritura opcionales integradas en el editor. Aparecen al establecer un token de proxy.
   ai_token: Token de proxy
   ai_token_placeholder: Pega el token de proxy
   ai_provider: Proveedor
   ai_model: Modelo
   ai_agent_mode: Modo del agente
-  ai_mode_auto_edit: Autoedición
-  ai_mode_suggest: Sugerir
+  ai_mode_auto_edit: Hacer cambios
+  ai_mode_suggest: Solo sugerir
   ai_history: Historial de chat
   ai_history_server: Guardar en el servidor
   ai_history_off: Desactivado
@@ -135,17 +135,20 @@ notification:
     no : Formato de datos inválido.
 
 ai:
-  title: Asistente de IA
-  open: Abrir chat de IA
-  empty: Pregunta lo que quieras sobre tu currículum.
-  placeholder: Pregunta sobre tu currículum…
-  send: Enviar
+  title: Mejorar redacción
+  open: Mejorar
+  empty: Describe un cambio. Puedes revisar y deshacer cada modificación.
+  placeholder: Describe un cambio…
+  send: Hacer cambio
   stop: Detener
-  apply: Aplicar
+  apply: Aplicar cambio
   undo: Deshacer
+  keep: Listo
+  review_title: Revisa el cambio en tu documento.
   undo_empty: No queda nada por deshacer
   no_model: Elige primero un modelo en Ajustes
-  notice_write: Currículum actualizado
+  notice_write: Cambio listo para revisar
+  notice_undo: Cambio deshecho
   notice_degraded: Este modelo no puede editar directamente — sus respuestas son sugerencias que aplicas tú.
   notice_loop_abort: Detenido tras {max} rondas de herramientas — el modelo seguía en bucle. Prueba una petición más concreta.
   notice_error: 'Error en la petición: {message}'

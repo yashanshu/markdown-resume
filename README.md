@@ -116,9 +116,9 @@ cp site/.env.example site/.env
 | `NUXT_CLARITY_ID` | [Microsoft Clarity](https://clarity.microsoft.com/) Project ID. Enables session recording and heatmap analytics. Leave empty to disable Clarity. |
 | `NUXT_PUBLIC_DISQUS_SHORTNAME` | [Disqus](https://disqus.com/) shortname for your site. Enables the Disqus comment section. Leave empty to hide comments. |
 
-## AI Assistant (optional, self-hosted)
+## AI writing assistance (optional, self-hosted)
 
-The editor includes an owner-only AI chat panel that can edit the resume directly (auto-edit mode, every write snapshotted with Undo) or propose snippets you apply yourself (suggest mode). It stays hidden until a proxy token is pasted into Settings — visitors never see it.
+The editor includes owner-only writing tools that can edit the resume directly (every write is snapshotted with Undo) or propose snippets you apply yourself. They are docked inside the editor and stay hidden until a proxy token is pasted into Settings — visitors never see them.
 
 The panel talks to a small Cloudflare Worker in [`worker/`](worker/) that proxies two OpenAI-compatible upstreams — [OpenCode Go](https://opencode.ai/zen/go/v1) (`go`) and [OpenRouter](https://openrouter.ai/api/v1) (`openrouter`) — and can store chat history in D1. It is a dumb pipe: the client picks the upstream and the model; there is no routing or fallback logic.
 

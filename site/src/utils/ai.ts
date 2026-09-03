@@ -34,10 +34,32 @@ export const pushUndoSnapshot = async (snap: UndoSnapshot): Promise<boolean> => 
   }
 };
 
-export const popUndoSnapshot = async (): Promise<UndoSnapshot | null> => {
+const matchingSnapshotIndex = (
+  stack: UndoSnapshot[],
+  resumeId: string | null
+): number => {
+  for (let i = stack.length - 1; i >= 0; i--)
+    if (stack[i].resumeId === null || stack[i].resumeId === resumeId) return i;
+  return -1;
+};
+
+export const hasUndoSnapshot = async (resumeId: string | null): Promise<boolean> => {
   try {
     const stack = (await localForage.getItem<UndoSnapshot[]>(UNDO_STACK_KEY)) ?? [];
-    const last = stack.pop() ?? null;
+    return matchingSnapshotIndex(stack, resumeId) !== -1;
+  } catch {
+    return false;
+  }
+};
+
+export const popUndoSnapshot = async (
+  resumeId: string | null
+): Promise<UndoSnapshot | null> => {
+  try {
+    const stack = (await localForage.getItem<UndoSnapshot[]>(UNDO_STACK_KEY)) ?? [];
+    const index = matchingSnapshotIndex(stack, resumeId);
+    if (index === -1) return null;
+    const [last] = stack.splice(index, 1);
     await localForage.setItem(UNDO_STACK_KEY, stack);
     return last;
   } catch {

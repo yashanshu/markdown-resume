@@ -40,15 +40,15 @@ settings:
   erase_warning: This action will remove all data and return this app to its factory state. This cannot be undone.
   type_delete: Type DELETE to confirm.
   confirm: Confirm
-  ai: AI Assistant
-  ai_description: Owner-only settings for the AI chat panel in the editor. The panel activates when a proxy token is set.
+  ai: Writing assistance
+  ai_description: Configure the optional writing tools built into the editor. They appear when a proxy token is set.
   ai_token: Proxy token
   ai_token_placeholder: Paste the proxy token
   ai_provider: Provider
   ai_model: Model
   ai_agent_mode: Agent mode
-  ai_mode_auto_edit: Auto-edit
-  ai_mode_suggest: Suggest
+  ai_mode_auto_edit: Make changes
+  ai_mode_suggest: Suggest only
   ai_history: Chat history
   ai_history_server: Save on server
   ai_history_off: Off
@@ -150,17 +150,20 @@ notification:
     no: Data format is invalid.
 
 ai:
-  title: AI assistant
-  open: Open AI chat
-  empty: Ask anything about your resume.
-  placeholder: Ask about your resume…
-  send: Send
+  title: Improve writing
+  open: Improve
+  empty: Describe an edit. You can review and undo every change.
+  placeholder: Describe an edit…
+  send: Make edit
   stop: Stop
-  apply: Apply
+  apply: Apply change
   undo: Undo
+  keep: Done
+  review_title: Review the change in your document.
   undo_empty: Nothing left to undo
   no_model: Select a model in Settings first
-  notice_write: Resume updated
+  notice_write: Change ready to review
+  notice_undo: Change undone
   notice_degraded: This model can't edit directly — its replies are suggestions you apply yourself.
   notice_loop_abort: Stopped after {max} tool rounds — the model kept looping. Try a more specific request.
   notice_error: 'Request failed: {message}'

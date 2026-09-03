@@ -73,9 +73,9 @@
             </li>
             <li><strong>Offline Ready</strong> — Works offline with PWA support</li>
             <li>
-              <strong>AI Assistant (optional)</strong> — An owner-only chat panel that can
-              edit the resume or suggest snippets; hidden unless a proxy token is set in
-              Settings
+              <strong>Writing assistance (optional)</strong> — Owner-only writing tools
+              built into the editor that can edit the resume or suggest snippets; hidden
+              unless a proxy token is set in Settings
             </li>
           </ul>
         </section>
@@ -97,7 +97,7 @@
               images are never collected or transmitted on their own
             </li>
             <li>
-              <strong>AI Is Opt-In</strong> — The AI panel is hidden without a proxy
+              <strong>AI Is Opt-In</strong> — The writing tools are hidden without a proxy
               token. Turn it on and your chat messages, including resume content, go to
               the provider you pick (OpenCode Go or OpenRouter) through a self-hosted
               worker, and are stored in its database only if you switch history to Server.
