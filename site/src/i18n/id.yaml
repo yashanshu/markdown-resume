@@ -76,7 +76,7 @@ resumes:
   created: "Dibuat: "
   updated: "Diperbarui: "
   new: Baru
-  save: Simpan
+  save: Simpan versi
   saveas: Cadangkan DB ...
   import: Pulihkan DB ...
   rename: Ubah Nama
@@ -148,6 +148,29 @@ notification:
   import:
     yes: Data berhasil diimpor!
     no: Format data tidak valid.
+
+versions:
+  title: Versi
+  none: Belum disimpan
+  none_hint: Belum ada versi. "Simpan versi" mencatat yang pertama.
+  na: Tidak ada
+  unsaved: Dokumen ini memiliki perubahan yang belum masuk ke versi mana pun
+  current: Saat ini
+  parent: Berdasarkan
+  base: Dasar
+  job_target: Pekerjaan sasaran
+  rename: Ubah nama versi
+  rename_prompt: Nama untuk versi ini
+  make_base: Jadikan ini dasar
+  changes: Tampilkan perubahan
+  hide_changes: Sembunyikan perubahan
+  diff_title: Perubahan
+  diff_unsaved: Suntingan belum disimpan sejak {label}
+  diff_since: Perubahan sejak {label}
+  diff_first: Versi pertama yang disimpan
+  diff_gap: "{count} baris tidak berubah"
+  no_changes: Tidak ada perubahan
+  switch_confirm: Dokumen ini memiliki suntingan yang belum disimpan dalam versi mana pun. Suntingan itu akan hilang. Tetap beralih?
 
 ai:
   title: Perbaiki tulisan

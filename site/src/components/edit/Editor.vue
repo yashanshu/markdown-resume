@@ -17,6 +17,7 @@
         />
       </button>
       <div class="flex-1" />
+      <VersionPicker />
       <button
         v-if="isAiEnabled"
         class="editor-ai-trigger"

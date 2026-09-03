@@ -76,7 +76,7 @@ resumes:
   created: "Created: "
   updated: "Updated: "
   new: New
-  save: Save
+  save: Save version
   saveas: Backup DB ...
   import: Restore DB ...
   rename: Rename
@@ -148,6 +148,29 @@ notification:
   import:
     yes: Data has been successfully imported!
     no: Data format is invalid.
+
+versions:
+  title: Version
+  none: Unsaved
+  none_hint: No versions yet. "Save version" records the first one.
+  na: None
+  unsaved: This document has changes that are not in a version yet
+  current: Current
+  parent: Based on
+  base: Base
+  job_target: Target job
+  rename: Rename version
+  rename_prompt: Name for this version
+  make_base: Make this the base
+  changes: Show changes
+  hide_changes: Hide changes
+  diff_title: Changes
+  diff_unsaved: Unsaved edits since {label}
+  diff_since: Changes since {label}
+  diff_first: The first saved version
+  diff_gap: "{count} unchanged lines"
+  no_changes: No changes
+  switch_confirm: This document has edits that are not saved in any version. They will be lost. Switch anyway?
 
 ai:
   title: Improve writing

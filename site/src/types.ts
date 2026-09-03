@@ -55,6 +55,24 @@ export type ResumeStorageItem = {
   update: string;
 };
 
+/** A saved point in one resume's history. Markdown only — styles are presentation. */
+export type ResumeVersion = {
+  id: string;
+  resumeId: string;
+  parentId: string | null; // immediate predecessor
+  baseId: string; // nearest ancestor that is a base; its own id when it is one
+  label: string; // "Base v1", "Backend Engineer · A"
+  markdown: string;
+  jobTarget?: string;
+  summary?: string; // change summary against the parent
+  createdAt: string;
+};
+
+export type VersionRecord = {
+  currentId: string | null;
+  versions: ResumeVersion[];
+};
+
 export type ResumeStorage = {
   [id: string]: ResumeStorageItem;
 };

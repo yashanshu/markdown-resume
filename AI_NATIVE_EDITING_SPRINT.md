@@ -1,6 +1,6 @@
 # Conversational Résumé Creation and Tailoring — Sprint Plan (Locked)
 
-Status: **locked** — decisions settled 2026-09-03, ready to execute
+Status: **Phase 1 complete** — baseline captured 2026-09-03, version graph and review surface shipped the same day; Phase 3 is next, with two fired Phase 2 triggers priced below.
 
 Supersedes: the eight-ticket, 60–80 hour version of this document. Preserved in the session scratchpad; it was never committed.
 
@@ -70,6 +70,8 @@ One finding cuts the other way, in the plan's favour: **the AI write never persi
 
 ## Phase 0 — Prompt, empty start, baseline (≈4 hours) — *hard gate*
 
+**Complete.** See [the Phase 0 baseline and condensed transcripts](./AI_NATIVE_EDITING_BASELINE.md). The operational floor was `qwen3.8-flash`; the ceiling was `qwen3.8-max`. The fact-ledger, job-profile, conversation-state-machine, and context-compaction triggers did not fire. The `ResumeProposal` trigger and delete-auto-edit trigger fired.
+
 Nothing else begins until this produces a transcript. Two items ship here not as scope but as prerequisites: the baseline cannot test "start from an empty résumé" against a fictional seed, and cannot measure a prompt that does not exist.
 
 1. **Fetch the model list** from `/go/v1/models` and name the floor model. Record it in the baseline.
@@ -83,6 +85,27 @@ Record per run: invented facts reaching an applied document; operations the mode
 **Gate:** a written baseline naming which of NAI-02, 03, 04, 06 the raw model already satisfies, with transcripts as evidence, and an explicit fired/not-fired verdict on every Phase 2 trigger.
 
 ## Phase 1 — Version graph and review surface (≈22 hours) — *unconditional, post-gate*
+
+**Complete.** What shipped, and where it differs from the plan above:
+
+| Item | Where | Note |
+| --- | --- | --- |
+| Version store | [`versions.ts`](site/src/utils/versions.ts) | One localForage key **per résumé** (`MARKDOWN_RESUME_versions_<id>`), so a save rewrites one résumé's history and defect 6 stays fixed. Graph logic (`appendVersion`) is pure and unit-checked; the storage layer is a thin read/modify/write around it. |
+| Save creates a version | [`database.ts`](site/src/utils/database.ts) | `saveCurrentResume(showToast, createVersion = showToast)`. The Enter-autosave's existing `saveCurrentResume(false)` therefore creates none, unchanged at the call site. Saving byte-identical markdown is a no-op, so Ctrl+S twice does not spawn a node. |
+| Branch dropdown | [`VersionPicker.vue`](site/src/components/edit/header/VersionPicker.vue) | In the **editor tab bar**, not the tools-pane header — the tools pane is collapsible and closed by default on mobile, so it fails "always visible". States current · based on · base, lists versions with their change stat, switches, renames, and promotes a version to base. |
+| Diff view | [`diff.ts`](site/src/utils/diff.ts), [`ResumeDiff.vue`](site/src/components/edit/ResumeDiff.vue) | LCS line diff, unchanged runs collapsed to gaps. Shown expanded in the AI review bar after every write, and in the picker's dialog (unsaved edits vs the current version, and the current version vs its parent). |
+| Tailoring branches | — | No new mechanism was needed: versions are immutable and a save is always a child of the current pointer, so switching the picker to a base and saving *is* a branch off it. Asserted in `verify-ai.ts`; the base stays byte-for-byte unchanged. |
+| "Save version" rename | `en`, `id`, `sp`, `zh-cn` | Plus a `versions:` block in all four. |
+| Invariant test | [`verify-ai.ts`](site/verify-ai.ts) | 50 checks, up from 32: suggest mode sends no tool to the upstream, `set_resume` is offered in auto-edit only, the chat write path snapshots before it writes, and no AI source path references `saveResume`/`saveCurrentResume`/the résumé storage key at all. |
+
+Three changes beyond the table, each closing something the baseline measured:
+
+1. **The prompt now names the real controls.** The baseline's floor run invented UI instructions and a sibling tree the app did not expose (`NAI-06 lineage: not satisfied`). `systemPrompt` takes a `versionContext`; `AiChat` computes it per turn with `lineageSummary`, so the model states actual current/parent/base and is told never to describe a control outside the listed set.
+2. **"Erase all content and settings" now erases version history and the AI undo stack.** Both are résumé content in durable storage that survived a factory reset before this phase.
+3. **Deleting a résumé deletes its version history**, rather than orphaning the key.
+
+Deliberately not built: localised default version labels (`Base v1`, `v2` are English and renameable, like the untranslated default résumé name), version deletion (Phase 3 owns its labelling alongside "delete branch"), and any automatic branch creation by the agent — the agent explains the two-step, the user performs it.
+
 
 ### Data model
 
@@ -236,13 +259,13 @@ Voice conversation; autonomous applications or job submission; background change
 
 ## Definition of done
 
-- [ ] Phase 0 baseline recorded against the reference script on both the floor and ceiling models, floor model named.
-- [ ] A person can start from an empty skeleton with no fictional content.
-- [ ] Every AI write is followed by a diff of what changed.
-- [ ] An explicit save creates a version; the Enter-autosave does not.
-- [ ] Tailoring creates a branch from a named base; the base is byte-for-byte unchanged.
-- [ ] The header dropdown states current, parent, and base for every version, and switches between branches.
-- [ ] No AI path reaches durable storage without an explicit save — asserted by a test, not held by a default.
-- [ ] Each Phase 2 trigger is evaluated against the baseline and recorded as fired or not fired.
+- [x] Phase 0 baseline recorded against the reference script on both the floor and ceiling models, floor model named.
+- [x] A person can start from an empty skeleton with no fictional content.
+- [x] Every AI write is followed by a diff of what changed.
+- [x] An explicit save creates a version; the Enter-autosave does not.
+- [x] Tailoring creates a branch from a named base; the base is byte-for-byte unchanged.
+- [x] The header dropdown states current, parent, and base for every version, and switches between branches.
+- [x] No AI path reaches durable storage without an explicit save — asserted by a test, not held by a default.
+- [x] Each Phase 2 trigger is evaluated against the baseline and recorded as fired or not fired — [verdict table](./AI_NATIVE_EDITING_BASELINE.md#phase-2-trigger-verdicts). Two fired: the `ResumeProposal` contract and deleting auto-edit mode. Neither is built; both are now the priced Phase 2 scope.
 - [ ] Keyboard, screen-reader, focus, forced-colors, 320-pixel, 200%-zoom, reduced-motion, and long-translation checks pass.
-- [ ] `pnpm --filter=site verify:ai`, `pnpm lint`, and `pnpm build` pass.
+- [x] `pnpm --filter=site verify:ai`, `pnpm lint`, and `pnpm build` pass.

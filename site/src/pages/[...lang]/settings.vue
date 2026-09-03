@@ -551,7 +551,7 @@ const eraseAllData = async () => {
   if (deleteConfirmation.value !== "DELETE" || isErasing.value) return;
 
   isErasing.value = true;
-  await Promise.all([clearResumeStorage(), clearImageStorage()]);
+  await Promise.all([clearResumeStorage(), clearImageStorage(), clearUndoStack()]);
   localStorage.removeItem("navigation-collapsed");
   localStorage.removeItem("nuxt-color-mode");
   localStorage.removeItem(EDITOR_MINIMAP_STORAGE_KEY);

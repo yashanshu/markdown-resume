@@ -69,7 +69,7 @@ resumes:
   created: 创建于：
   updated: 更新于：
   new: 新建
-  save: 保存
+  save: 保存版本
   saveas: 另存为...
   import: 从...导入
   duplicate: 创建副本
@@ -133,6 +133,29 @@ notification:
   import:
     yes: 已成功导入数据！
     no : 数据格式不正确
+
+versions:
+  title: 版本
+  none: 未保存
+  none_hint: 还没有版本。“保存版本”会记录第一个版本。
+  na: 无
+  unsaved: 此文档的改动尚未保存到任何版本中
+  current: 当前
+  parent: 基于
+  base: 基准
+  job_target: 目标职位
+  rename: 重命名版本
+  rename_prompt: 为此版本命名
+  make_base: 设为基准
+  changes: 查看改动
+  hide_changes: 隐藏改动
+  diff_title: 改动
+  diff_unsaved: 自 {label} 以来未保存的编辑
+  diff_since: 自 {label} 以来的改动
+  diff_first: 第一个保存的版本
+  diff_gap: "{count} 行未改动"
+  no_changes: 没有改动
+  switch_confirm: 此文档有未保存到任何版本的编辑，切换后将丢失。仍要切换吗？
 
 ai:
   title: 改进文字

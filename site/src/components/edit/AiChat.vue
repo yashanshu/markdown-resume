@@ -25,19 +25,34 @@
       </button>
     </div>
 
-    <div v-if="reviewPending" class="ai-review">
-      <span i-mdi:file-document-edit-outline flex-shrink-0 />
-      <span class="min-w-0 flex-1" role="status">{{ $t("ai.review_title") }}</span>
-      <button class="ai-review-action" :disabled="isRunning" @click="undo">
-        {{ $t("ai.undo") }}
-      </button>
-      <button
-        class="ai-review-action ai-review-action--primary"
-        :disabled="isRunning"
-        @click="keepEdit"
-      >
-        {{ $t("ai.keep") }}
-      </button>
+    <div v-if="reviewPending" class="ai-review-panel">
+      <div class="ai-review">
+        <span i-mdi:file-document-edit-outline flex-shrink-0 />
+        <span class="min-w-0 flex-1" role="status">{{ $t("ai.review_title") }}</span>
+        <button
+          class="ai-review-action"
+          :aria-expanded="showDiff"
+          @click="showDiff = !showDiff"
+        >
+          {{ showDiff ? $t("versions.hide_changes") : $t("versions.changes") }}
+        </button>
+        <button class="ai-review-action" :disabled="isRunning" @click="undo">
+          {{ $t("ai.undo") }}
+        </button>
+        <button
+          class="ai-review-action ai-review-action--primary"
+          :disabled="isRunning"
+          @click="keepEdit"
+        >
+          {{ $t("ai.keep") }}
+        </button>
+      </div>
+      <ResumeDiff
+        v-if="showDiff"
+        class="ai-review-diff"
+        :before="reviewBefore"
+        :after="data.mdContent"
+      />
     </div>
 
     <div
@@ -153,6 +168,10 @@ const input = ref("");
 const isRunning = ref(false);
 const canUndo = ref(false);
 const reviewPending = ref(false);
+// the document as it stood before the pending AI write, so the diff shown
+// after the write needs no storage read
+const reviewBefore = ref("");
+const showDiff = ref(true);
 
 let nextId = 1;
 let history: ModelMessage[] = [];
@@ -206,6 +225,7 @@ const writeResume = async (markdown: string): Promise<boolean> => {
     ts: Date.now()
   });
   if (!ok) return false;
+  reviewBefore.value = data.mdContent;
   setResumeMd(markdown);
   return true;
 };
@@ -221,6 +241,7 @@ const applySnippet = async (item: ChatItem) => {
 
 const keepEdit = () => {
   reviewPending.value = false;
+  showDiff.value = true;
 };
 
 const undo = async () => {
@@ -234,6 +255,7 @@ const undo = async () => {
   }
   setResumeMd(snap.markdown);
   reviewPending.value = false;
+  showDiff.value = true;
   canUndo.value = await hasUndoSnapshot(data.curResumeId);
   push({ role: "notice", text: t("ai.notice_undo"), code: "write" });
   scrollToBottom();
@@ -284,6 +306,12 @@ const send = async () => {
     }
   };
 
+  // lineage is read per turn so the agent describes real state, not invented state
+  const versionContext = lineageSummary(
+    await getVersionRecord(data.curResumeId),
+    data.mdContent
+  );
+
   let result: Awaited<ReturnType<typeof runAgentTurn>>;
   try {
     result = await runAgentTurn({
@@ -294,6 +322,7 @@ const send = async () => {
       messages: history,
       userText: text,
       getResume: () => data.mdContent,
+      versionContext,
       writeResume,
       signal: abort.signal,
       onEvent
@@ -384,8 +413,16 @@ onMounted(async () => {
   @apply flex-1 resize-none bg-c border border-c rounded px-2 py-1.5 outline-none focus:border-blue-500 disabled:opacity-60;
 }
 
+.ai-review-panel {
+  @apply flex-none border-b border-blue-500/30 bg-blue-500/8;
+}
+
 .ai-review {
-  @apply hstack flex-none gap-2 border-b border-blue-500/30 bg-blue-500/8 px-3 py-2 text-xs md:text-sm;
+  @apply hstack gap-2 px-3 py-2 text-xs md:text-sm;
+}
+
+.ai-review-diff {
+  @apply max-h-56 overflow-y-auto px-3 pb-2;
 }
 
 .ai-review-action {

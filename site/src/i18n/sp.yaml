@@ -68,7 +68,7 @@ resumes:
   created: "Creado: "
   updated: "Actualizado: "
   new: Nuevo
-  save: Guardar
+  save: Guardar versión
   saveas: Guardar como...
   import: Importar desde...
   rename: Renombrar
@@ -133,6 +133,29 @@ notification:
   import:
     yes: Datos importados correctamente!
     no : Formato de datos inválido.
+
+versions:
+  title: Versión
+  none: Sin guardar
+  none_hint: Aún no hay versiones. "Guardar versión" registra la primera.
+  na: Ninguna
+  unsaved: Este documento tiene cambios que aún no están en ninguna versión
+  current: Actual
+  parent: Basada en
+  base: Base
+  job_target: Puesto objetivo
+  rename: Renombrar versión
+  rename_prompt: Nombre para esta versión
+  make_base: Convertir en base
+  changes: Ver cambios
+  hide_changes: Ocultar cambios
+  diff_title: Cambios
+  diff_unsaved: Ediciones sin guardar desde {label}
+  diff_since: Cambios desde {label}
+  diff_first: La primera versión guardada
+  diff_gap: "{count} líneas sin cambios"
+  no_changes: Sin cambios
+  switch_confirm: Este documento tiene ediciones que no están guardadas en ninguna versión y se perderán. ¿Cambiar de todos modos?
 
 ai:
   title: Mejorar redacción

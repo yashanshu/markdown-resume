@@ -6,7 +6,10 @@ import type { PaperType, ResumeStorage, ResumeStorageItem, ResumeStyles } from "
 
 const MARKDOWN_RESUME_KEY = "MARKDOWN_RESUME_data";
 
-export const clearResumeStorage = () => localForage.removeItem(MARKDOWN_RESUME_KEY);
+export const clearResumeStorage = async () => {
+  await localForage.removeItem(MARKDOWN_RESUME_KEY);
+  await clearAllVersionHistory();
+};
 
 export const getStorage = async () =>
   isClient ? localForage.getItem<ResumeStorage>(MARKDOWN_RESUME_KEY) : null;
@@ -80,13 +83,18 @@ export const saveResume = async (
   }
 };
 
-export const saveCurrentResume = (showToast = true) => {
+/**
+ * @param showToast show the "saved" toast
+ * @param createVersion record a version of the markdown (decision 7: only an
+ *   explicit save does; the editor's Enter-autosave passes false)
+ */
+export const saveCurrentResume = async (showToast = true, createVersion = showToast) => {
   const { data } = useDataStore();
   const { styles } = useStyleStore();
 
   if (!data.curResumeId) return;
 
-  return saveResume(
+  await saveResume(
     data.curResumeId,
     {
       name: data.curResumeName,
@@ -97,6 +105,8 @@ export const saveCurrentResume = (showToast = true) => {
     },
     showToast
   );
+
+  if (createVersion) await saveVersion(data.curResumeId, data.mdContent);
 };
 
 /**
@@ -109,12 +119,9 @@ export const newResume = async () => {
   const resumeName = defaultFullName.trim()
     ? `${defaultFullName.trim()} Resume`
     : DEFAULT_NAME;
-  const markdownNameToUse = defaultFullName.trim() || "Firstname Lastname";
+  const markdownNameToUse = defaultFullName.trim() || "Name";
   // Replace the default name in markdown
-  const markdown = DEFAULT_MD_CONTENT.replace(
-    "# Firstname Lastname",
-    `# ${markdownNameToUse}`
-  );
+  const markdown = DEFAULT_MD_CONTENT.replace("# Name", `# ${markdownNameToUse}`);
   const styles = { ...DEFAULT_STYLES, paper: getDefaultPaperSize() as PaperType };
 
   const resume = {
@@ -209,6 +216,7 @@ export const deleteResume = async (id: string) => {
     delete storage[id];
 
     await localForage.setItem(MARKDOWN_RESUME_KEY, storage);
+    await deleteVersionHistory(id);
 
     toast.delete(name);
   }
